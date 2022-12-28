@@ -9,7 +9,7 @@ const usersRouter = require('./routes/users');
 const postsRouter = require('./routes/posts')
 const authRouter = require('./routes/auth')
 const commentsRouter = require('./routes/comments')
-
+const collectionsRouter = require('./routes/collections')
 
 const dotenv = require('dotenv')
 dotenv.config()
@@ -28,6 +28,7 @@ mongoose.connect(DB_HOST).then(() => {
 })
 
 const cors = require('cors')
+const {collections} = require("./controllers");
 app.use(logger('dev'));
 app.use(cors())
 app.use(express.json({limit: '20mb'}));
@@ -37,7 +38,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/Posts', postsRouter)
+app.use('/collections', collectionsRouter)
+app.use('/posts', postsRouter)
 app.use('/auth', authRouter)
 app.use('/comments', commentsRouter)
 

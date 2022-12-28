@@ -2,7 +2,7 @@ const {Post} = require('../../models')
 
 const findOneById = async (req, res) => {
 
-    const post = await Post.findById(req.params.id).populate({
+    const post = await Post.findById(req.params.id).populate('author').populate({
         path: 'comments',
         populate: {
             path: 'replies'

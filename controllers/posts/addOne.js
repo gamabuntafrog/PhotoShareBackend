@@ -1,10 +1,10 @@
-const {Post} = require('../../models')
+const {Post, Collection} = require('../../models')
 const cloudinary = require("../../utils/cloudinary");
 
 const addOne = async (req, res) => {
     const {user} = req
     const {_id} = user
-    const {image: imageFile} = req.body
+    const {image: imageFile, collection: {_id: collectionId}} = req.body
 
     if (imageFile) {
         const result = await cloudinary.uploader.upload(imageFile, {
@@ -27,8 +27,15 @@ const addOne = async (req, res) => {
         ...req.body, author: _id
     })
 
+    const collection = await Collection.findByIdAndUpdate(collectionId, {
+        $push: {
+            posts: post._id
+        }
+    })
+
     user.posts.push(post._id)
     await user.save()
+
 
     res.status(201).send({
         code: 201,

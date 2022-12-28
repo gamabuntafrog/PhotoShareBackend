@@ -1,7 +1,6 @@
 const {Schema, model} = require('mongoose')
 
 
-
 const postSchema = Schema({
     author: {
         type: Schema.Types.ObjectId,
@@ -50,7 +49,7 @@ const postSchema = Schema({
             ref: 'comment'
         }]
     }
-},{
+}, {
     timestamps: true
 })
 

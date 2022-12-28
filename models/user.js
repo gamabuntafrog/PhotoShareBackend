@@ -28,6 +28,9 @@ const userSchema = Schema({
         type: Number,
         default: 0,
     },
+    collections: {
+      type: [{type: Schema.Types.ObjectId, ref: 'collection'}]
+    },
     posts: {
         type: [{type: Schema.Types.ObjectId, ref: 'post'}]
     },
