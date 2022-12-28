@@ -2,7 +2,7 @@ const {Post} = require('../../models')
 
 const getAll = async (req, res) => {
 
-    const posts = await Post.find().populate({
+    const posts = await Post.find().sort({createdAt: -1}).populate({
         path: 'author'
     })
 

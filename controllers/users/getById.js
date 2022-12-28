@@ -7,7 +7,10 @@ const getById = async (req, res) => {
     const {posts} = req.query
 
     const dbParams = posts ? {
-        path: 'posts'
+        path: 'posts',
+        options: {
+            sort: {createdAt: -1}
+        }
     } : null
 
     const user = await User.findById(id).populate(dbParams)

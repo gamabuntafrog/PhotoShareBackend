@@ -12,6 +12,16 @@ const postSchema = Schema({
         type: String,
         required: true
     },
+    image: {
+        url: {
+            type: String,
+            required: true
+        },
+        id: {
+            type: String,
+            required: true
+        }
+    },
     body: {
         type: String,
         required: true
