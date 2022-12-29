@@ -23,7 +23,7 @@ const postSchema = Schema({
     },
     body: {
         type: String,
-        required: true
+        default: ''
     },
     tags: {
         type: [String],

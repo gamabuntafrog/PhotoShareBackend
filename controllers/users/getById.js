@@ -4,16 +4,23 @@ const {User} = require("../../models");
 const getById = async (req, res) => {
 
     const {id} = req.params
-    const {posts} = req.query
+    const {posts, collections} = req.query
 
-    const dbParams = posts ? {
-        path: 'posts',
+    const collectionsParams = collections ? {
+        path: 'collections',
         options: {
             sort: {createdAt: -1}
+        },
+        populate: {
+            path: 'posts',
+            options: {
+                sort: {createdAt: -1},
+                limit: 3
+            },
         }
     } : null
 
-    const user = await User.findById(id).populate(dbParams)
+    const user = await User.findById(id).populate(collectionsParams)
 
     res.status(200).json({
         code: 200,
@@ -23,5 +30,5 @@ const getById = async (req, res) => {
         }
     })
 }
-//
+
 module.exports = getById
