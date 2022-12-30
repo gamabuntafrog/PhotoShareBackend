@@ -8,7 +8,7 @@ const getCurrent = async (req, res) => {
 
     const params = author ? {path: 'author'} : null
 
-    const collections = await Collection.find({author: '63ac33c7bec2956d03f8e5e6'}).populate(params)
+    const collections = await Collection.find({author: currentUserId}).populate(params)
 
     res.status(200).json({
         status: 'success',

@@ -9,7 +9,7 @@ const postSchema = Schema({
     },
     title: {
         type: String,
-        required: true
+        default: ''
     },
     image: {
         url: {
@@ -34,6 +34,12 @@ const postSchema = Schema({
         default: 0
     },
     usersLiked: {
+        type: [{
+            type: Schema.Types.ObjectId,
+            ref: 'user'
+        }],
+    },
+    usersSaved: {
         type: [{
             type: Schema.Types.ObjectId,
             ref: 'user'

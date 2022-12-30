@@ -4,7 +4,7 @@ const cloudinary = require("../../utils/cloudinary");
 const addOne = async (req, res) => {
     const {user} = req
     const {_id} = user
-    const {image: imageFile, collection: {_id: collectionId}} = req.body
+    const {image: imageFile, collectionId} = req.body
 
     if (imageFile) {
         const result = await cloudinary.uploader.upload(imageFile, {
@@ -34,6 +34,7 @@ const addOne = async (req, res) => {
     })
 
     user.posts.push(post._id)
+
     await user.save()
 
 

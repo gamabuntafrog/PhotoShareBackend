@@ -2,7 +2,7 @@ const {Post, User} = require("../../models");
 const {Conflict} = require("http-errors");
 
 
-const like = async (req, res) => {
+const likePostInCollection = async (req, res) => {
     const {id: postId} = req.params
     const {_id: userId} = req.user
 
@@ -31,4 +31,4 @@ const like = async (req, res) => {
     res.status(204).send()
 }
 
-module.exports = like
+module.exports = likePostInCollection
