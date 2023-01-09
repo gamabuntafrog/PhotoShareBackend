@@ -1,27 +1,32 @@
-const {Post, User} = require("../../models");
+const {Post, User, Collection} = require("../../models");
 const {NotFound, Conflict} = require('http-errors')
 
 const addToSaved = async (req, res) => {
-    const {id: postId} = req.params
-    const {_id: userId} = req.user
+    const {id: postId, collectionId} = req.params
+    const {_id: currentUserId} = req.user
 
     const post = await Post.findById(postId)
     if (!post) {
         throw new NotFound('Posts no exists')
     }
 
-    const postIdIfItAlreadyExistsInSaved = req.user.savedPosts.find(pstId => pstId.toString() === postId) || null
-    if (postIdIfItAlreadyExistsInSaved) {
-        throw new Conflict('post already in saved')
+    const collection = await Collection.findById(collectionId)
+    if (!collection) {
+        throw new NotFound('collection no exists')
     }
 
-    const pushPost = await User.findByIdAndUpdate(userId, {
+    const isPostExistsInCollection = collection.posts.some((el) => el.toString() === postId)
+    if (isPostExistsInCollection) {
+        throw new NotFound('post already saved')
+    }
+
+    await Collection.findByIdAndUpdate(collectionId, {
         $push: {
-            savedPosts: postId
+            posts: postId
         }
     })
 
-    const incrementCount = await User.findByIdAndUpdate(userId, {
+    await Post.findByIdAndUpdate(postId, {
         $inc: {
             savesCount: 1
         }

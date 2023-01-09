@@ -24,7 +24,7 @@ const addOne = async (req, res) => {
 
     console.log(req.body)
     const post = await Post.create({
-        ...req.body, author: _id
+        ...req.body, author: _id, usersSaved: [collectionId]
     })
 
     const collection = await Collection.findByIdAndUpdate(collectionId, {
@@ -34,7 +34,7 @@ const addOne = async (req, res) => {
     })
 
     user.posts.push(post._id)
-
+    user.savedPosts.push({post: post._id, collection: collectionId})
     await user.save()
 
 

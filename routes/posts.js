@@ -23,9 +23,9 @@ router.patch('/:id/like', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(ctr
 
 router.patch('/:id/unlike', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(ctrl.unlike))
 
-router.post('/:id/saved', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(ctrl.addToSaved))
+router.patch('/:id/saves/:collectionId', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(ctrl.addToSaved))
 
-router.delete('/:id/saved', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(ctrl.deleteFromSaved))
+router.patch('/:id/unsaves/:collectionId', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(ctrl.deleteFromSaved))
 
 router.post('/:id/comments', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(commentsCtrl.addComment))
 

@@ -29,13 +29,10 @@ const userSchema = Schema({
         default: 0,
     },
     collections: {
-      type: [{type: Schema.Types.ObjectId, ref: 'collection'}]
+        type: [{type: Schema.Types.ObjectId, ref: 'collection'}]
     },
     posts: {
         type: [{type: Schema.Types.ObjectId, ref: 'post'}]
-    },
-    savedPosts: {
-        type: [{type: Schema.Types.ObjectId, ref: 'post'}],
     },
     likedPosts: {
         type: [{type: Schema.Types.ObjectId, ref: 'post'}],
@@ -65,3 +62,4 @@ userSchema.methods.comparePassword = function (password) {
 const User = model('user', userSchema)
 
 module.exports = User
+

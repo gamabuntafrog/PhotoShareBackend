@@ -39,12 +39,6 @@ const postSchema = Schema({
             ref: 'user'
         }],
     },
-    usersSaved: {
-        type: [{
-            type: Schema.Types.ObjectId,
-            ref: 'user'
-        }],
-    },
     likesCount: {
         type: Number,
         default: 0

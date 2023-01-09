@@ -1,6 +1,7 @@
 const Joi = require("joi");
 const objectId = Joi.object({
-    id: Joi.string().length(24).required()
+    id: Joi.string().length(24).required(),
+    collectionId: Joi.string()
 })
 
 
