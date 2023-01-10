@@ -5,6 +5,7 @@ const likePostInCollection = require('./likePostInCollection')
 const unlikePostInCollection = require('./unlikePostInCollection')
 const savePostInCollection = require('./savePostInCollection')
 const unsavePostInCollection = require('./unsavePostInCollection')
+const deleteCollection = require('./deleteCollection')
 
 module.exports = {
     create,
@@ -13,5 +14,6 @@ module.exports = {
     likePostInCollection,
     unlikePostInCollection,
     savePostInCollection,
-    unsavePostInCollection
+    unsavePostInCollection,
+    deleteCollection
 }

@@ -19,6 +19,8 @@ router.get('/titles/:title', ctrlWrapper(ctrl.getByTitle))
 
 router.post('/', ctrlWrapper(auth), ctrlWrapper(ctrl.addOne))
 
+router.delete('/:id', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(ctrl.deletePost))
+
 router.patch('/:id/like', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(ctrl.like))
 
 router.patch('/:id/unlike', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(ctrl.unlike))

@@ -19,4 +19,6 @@ router.patch('/:id/unsave', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(c
 
 router.post('/', ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.create))
 
+router.delete('/:id', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.deleteCollection))
+
 module.exports = router

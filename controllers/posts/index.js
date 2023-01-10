@@ -10,7 +10,7 @@ const addToSaved = require('./addToSaved')
 const deleteFromSaved = require('./deleteFromSaved')
 const like = require('./like')
 const unlike = require('./unlike')
-
+const deletePost = require('./deletePost')
 
 module.exports = {
     getAll,
@@ -24,5 +24,6 @@ module.exports = {
     addToSaved,
     deleteFromSaved,
     like,
-    unlike
+    unlike,
+    deletePost
 }
