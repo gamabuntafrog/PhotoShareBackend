@@ -18,7 +18,6 @@ const auth = async (req, res, next) => {
             throw new Unauthorized("Not authorized")
         }
         // const {} = id.sfda
-
         const {id} = jwt.verify(token, SECRET_KEY, validateJwtVerifyError)
 
         const user = await User.findById(id)

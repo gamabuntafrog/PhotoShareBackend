@@ -1,7 +1,6 @@
 const Joi = require("joi");
+const {MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH} = require("./variables");
 
-const MIN_PASSWORD_LENGTH = 6
-const MAX_PASSWORD_LENGTH = 50
 
 
 const loginValidationSchema = Joi.object({

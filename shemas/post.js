@@ -1,12 +1,8 @@
 const Joi = require("joi");
+const {MIN_TAGS_LENGTH, MAX_TAGS_LENGTH, MIN_TITLE_LENGTH, MAX_TITLE_LENGTH, MAX_BODY_LENGTH, MIN_BODY_LENGTH,
+    OBJECT_ID_LENGTH, MIN_USERNAME_LENGTH, MAX_USERNAME_LENGTH
+} = require("./variables");
 
-const MAX_TITLE_LENGTH = 30
-const MIN_TITLE_LENGTH = 0
-const MIN_BODY_LENGTH = 0
-const MAX_BODY_LENGTH = 200
-const MIN_TAGS_LENGTH = 3
-const MAX_TAGS_LENGTH = 30
-const OBJECT_ID_LENGTH = 24
 
 const REGEX_CHECKING_HASHTAG_PATTERN = /\B#([a-z0-9]{2,})(?![~!@#$%^&*()=+_`\-\|\\/'\[\]\{\}]|[?.,]*\w)/i;
 
@@ -23,13 +19,13 @@ const postValidationObject = {
 
 const postValidationSchema = Joi.object(postValidationObject)
 
-const addPostValidationScema = Joi.object({
+const addPostValidationSchema = Joi.object({
     ...postValidationObject,
     collectionId: Joi.string().required().length(OBJECT_ID_LENGTH),
 })
 
 module.exports = {
     postValidationSchema,
-    addPostValidationScema,
+    addPostValidationSchema,
     tagsValidation,
 }

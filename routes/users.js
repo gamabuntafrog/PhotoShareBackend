@@ -1,11 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const {users: ctrl, notifications: notificationsCtrl} = require('../controllers');
-const {ctrlWrapper, auth, validateObjectId} = require('../middlewares')
+const {ctrlWrapper, auth, validateObjectId, validate} = require('../middlewares')
+const {updateUserValidationSchema} = require("../shemas/user");
 
 router.get('/', ctrlWrapper(ctrl.getAll));
 
 router.get('/current', ctrlWrapper(auth), ctrlWrapper(ctrl.getCurrent))
+
+router.patch('/current', ctrlWrapper(auth), validate(updateUserValidationSchema), ctrlWrapper(ctrl.updateCurrent))
 
 router.get('/notifications', ctrlWrapper(auth), ctrlWrapper(notificationsCtrl.getOne))
 
@@ -19,9 +22,7 @@ router.delete('/:id/subscribes', validateObjectId(), ctrlWrapper(auth), ctrlWrap
 
 router.get('/subscribes', ctrlWrapper(auth), ctrlWrapper(ctrl.getSubscribes))
 
-router.patch('/avatars', ctrlWrapper(auth), ctrlWrapper(ctrl.changeAvatar))
 
-router.patch('/', ctrlWrapper(auth), ctrlWrapper(ctrl.updateById))
 
 
 module.exports = router;

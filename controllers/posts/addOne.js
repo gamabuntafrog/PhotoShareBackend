@@ -46,6 +46,7 @@ const addOne = async (req, res) => {
     res.status(201).send({
         code: 201,
         status: 'success',
+        message: 'Post created',
         data: {
             post
         }

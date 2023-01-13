@@ -3,9 +3,8 @@ const addToSubscribes = require('./addToSubscribes')
 const deleteFromSubscribes = require('./deleteFromSubscribes')
 const getSubscribes = require('./getSubscribes')
 const getCurrent = require('./getCurrent')
-const changeAvatar = require('./changeAvatar')
 const getById = require('./getById')
-const updateById = require('./updateById')
+const updateCurrent = require('./updateCurrent')
 
 
 module.exports = {
@@ -14,7 +13,6 @@ module.exports = {
     deleteFromSubscribes,
     getSubscribes,
     getCurrent,
-    changeAvatar,
     getById,
-    updateById
+    updateCurrent
 }

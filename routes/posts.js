@@ -2,7 +2,7 @@ const express = require('express')
 const {ctrlWrapper, auth, validateObjectId, validate} = require("../middlewares");
 const {posts: ctrl, commentsToPost: commentsCtrl} = require('../controllers')
 const Joi = require("joi");
-const {addPostValidationScema} = require("../shemas/post");
+const {addPostValidationSchema} = require("../shemas/post");
 const router = express.Router()
 
 router.get('/', ctrlWrapper(ctrl.getAll))
@@ -21,7 +21,7 @@ router.get('/titles/:title', ctrlWrapper(ctrl.getByTitle))
 
 
 
-router.post('/', validate(addPostValidationScema), ctrlWrapper(auth), ctrlWrapper(ctrl.addOne))
+router.post('/', validate(addPostValidationSchema), ctrlWrapper(auth), ctrlWrapper(ctrl.addOne))
 
 router.delete('/:id', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(ctrl.deletePost))
 
