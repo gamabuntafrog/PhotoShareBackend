@@ -1,9 +1,10 @@
 
 const express = require('express')
-const {ctrlWrapper, auth, validateObjectId} = require("../middlewares");
+const {ctrlWrapper, auth, validateObjectId, validate} = require("../middlewares");
 const router = express.Router()
 
 const {collections: collectionsCtrl, ctrl}= require('../controllers')
+const {collectionValidationSchema} = require("../shemas/collection");
 
 router.get('/', ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.getCurrent))
 
@@ -17,7 +18,7 @@ router.patch('/:id/save', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(col
 
 router.patch('/:id/unsave', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.unsavePostInCollection))
 
-router.post('/', ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.create))
+router.post('/', validate(collectionValidationSchema), ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.create))
 
 router.delete('/:id', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.deleteCollection))
 

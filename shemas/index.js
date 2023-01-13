@@ -1,7 +1,7 @@
-const register = require('./register')
-// const login = require('./login')
+const registerValidationSchema = require('./register')
+const loginValidationSchema = require('./login')
 
 module.exports = {
-    register,
-    // login
+    registerValidationSchema,
+    loginValidationSchema
 }

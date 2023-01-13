@@ -1,10 +1,13 @@
-const {Post, Collection} = require('../../models')
+const {Post, Collection, User} = require('../../models')
 const cloudinary = require("../../utils/cloudinary");
+
 
 const addOne = async (req, res) => {
     const {user} = req
     const {_id} = user
     const {image: imageFile, collectionId} = req.body
+
+    // throw 10
 
     if (imageFile) {
         const result = await cloudinary.uploader.upload(imageFile, {
@@ -22,8 +25,7 @@ const addOne = async (req, res) => {
         delete req.body.image
     }
 
-    console.log(req.body)
-    const post = await Post.create({
+    const post = await Post. create({
         ...req.body, author: _id, usersSaved: [collectionId]
     })
 
@@ -33,9 +35,12 @@ const addOne = async (req, res) => {
         }
     })
 
-    user.posts.push(post._id)
-    user.savedPosts.push({post: post._id, collection: collectionId})
-    await user.save()
+    await User.findByIdAndUpdate(_id, {
+        $push: {
+            posts: post._id,
+            savedPosts: {post: post._id, collection: collectionId}
+        }
+    })
 
 
     res.status(201).send({
@@ -46,5 +51,5 @@ const addOne = async (req, res) => {
         }
     })
 }
-//
+
 module.exports = addOne

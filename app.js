@@ -51,8 +51,8 @@ app.use((req, res, next) => {
 
 // error handler
 app.use((err, req, res, next) => {
-    console.log(err)
     const {statusCode = 500, statusMessage = 'error', message = 'Server error'} = err
+    console.log(err, 'error handler')
 
     res.status(statusCode).json({
         message: statusCode === 500 ? 'Server error' : message,

@@ -10,16 +10,17 @@ const deleteFromSaved = async (req, res) => {
 
     const post = await Post.findById(postId)
     if (!post) {
-        throw new NotFound('post no exists')
+        throw new NotFound('Post no exists')
     }
 
     const collection = await Collection.findById(collectionId)
     if (!collection) {
-        throw new NotFound('collection no exists')
+        throw new NotFound('Collection no exists')
     }
+
     const isPostExistsInCollection = collection.posts.some((el) => el.toString() === postId)
     if (!isPostExistsInCollection) {
-        throw new NotFound('post already not saved')
+        throw new NotFound(`This post already not saved in ${collection.title}`)
     }
 
     await Collection.findByIdAndUpdate(collectionId, {

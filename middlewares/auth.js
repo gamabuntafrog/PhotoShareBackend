@@ -26,7 +26,6 @@ const auth = async (req, res, next) => {
         if (!user || !user.token) {
             throw new Unauthorized("Not authorized")
         }
-        // throw new Unauthorized("Not authorized")
 
         req.user = user
         req.currentUser = user

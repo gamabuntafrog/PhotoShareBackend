@@ -1,6 +1,6 @@
 const Post = require("../../models/post");
 const {User} = require("../../models");
-
+const {Conflict} = require('http-errors')
 
 const deletePost = async (req, res) => {
     const {id: postId} = req.params
