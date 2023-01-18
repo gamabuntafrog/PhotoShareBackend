@@ -3,7 +3,7 @@ const {NotFound, Conflict} = require('http-errors')
 
 const addToSaved = async (req, res) => {
     const {id: postId, collectionId} = req.params
-    const {_id: currentUserId} = req.user
+    const {currentUserId} = req
 
     const post = await Post.findById(postId)
     if (!post) {
@@ -35,7 +35,9 @@ const addToSaved = async (req, res) => {
     res.status(201).json({
         status: 'success',
         code: 201,
-        data: post
+        data: {
+            post: post
+        }
     })
 
 }

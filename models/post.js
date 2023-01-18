@@ -53,6 +53,13 @@ const postSchema = Schema({
     timestamps: true
 })
 
+// postSchema.pre('find', function (next, docs) {
+//     this.where({title: 'test'})
+//     console.log(doc)
+//     // const isLiked = post.usersLiked.some((id) => id.toString() === currentUserId.toString())
+//     next()
+// })
+
 const Post = model('post', postSchema)
 
 module.exports = Post

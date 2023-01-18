@@ -11,13 +11,14 @@ const unlike = async (req, res) => {
         throw new Conflict('post already not liked')
     }
 
-    const removeLikeFromPost = await Post.findByIdAndUpdate(postId, {
+    const updatedPost = await Post.findByIdAndUpdate(postId, {
         $inc: {
             likesCount: -1
         },
         $pull: {
             usersLiked: userId
-        }
+        },
+        new: true
     })
 
     const removePostFromUserLiked = await User.findByIdAndUpdate(userId, {
@@ -27,7 +28,13 @@ const unlike = async (req, res) => {
     })
 
 
-    res.status(204).send()
+    res.status(200).json({
+        code: 200,
+        status: 'success',
+        data: {
+            post: updatedPost
+        }
+    })
 }
 
 module.exports = unlike

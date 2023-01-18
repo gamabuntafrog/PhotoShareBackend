@@ -12,13 +12,14 @@ const like = async (req, res) => {
         throw new Conflict('post already liked')
     }
 
-    const addLikeToPost = await Post.findByIdAndUpdate(postId, {
+    const updatedPost = await Post.findByIdAndUpdate(postId, {
         $inc: {
             likesCount: 1
         },
         $push: {
             usersLiked: userId
-        }
+        },
+        new: true
     })
 
     const addPostInUserLiked = await User.findByIdAndUpdate(userId, {
@@ -28,7 +29,13 @@ const like = async (req, res) => {
     })
 
 
-    res.status(204).send()
+    res.status(200).json({
+        code: 200,
+        status: 'success',
+        data: {
+            post: updatedPost
+        }
+    })
 }
 
 module.exports = like

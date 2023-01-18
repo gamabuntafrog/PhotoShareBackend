@@ -5,13 +5,13 @@ const Joi = require("joi");
 const {addPostValidationSchema} = require("../shemas/post");
 const router = express.Router()
 
-router.get('/', ctrlWrapper(ctrl.getAll))
+router.get('/', ctrlWrapper(auth), ctrlWrapper(ctrl.getAll))
 
 router.get('/my', ctrlWrapper(auth), ctrlWrapper(ctrl.getMy))
 
 router.get('/saved', ctrlWrapper(auth), ctrlWrapper(ctrl.getSaved))
 
-router.get('/:id', ctrlWrapper(ctrl.findOneById))
+router.get('/:id', ctrlWrapper(auth), ctrlWrapper(ctrl.findOneById))
 
 router.get('/authors/:username', ctrlWrapper(ctrl.findByUsername))
 

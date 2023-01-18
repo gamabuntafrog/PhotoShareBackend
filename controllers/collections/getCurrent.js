@@ -2,13 +2,9 @@ const {Collection} = require("../../models");
 
 
 const getCurrent = async (req, res) => {
-    const {user: currentUser} = req
-    const {author = false} = req.params
-    const {_id: currentUserId} = currentUser
+    const {currentUserId} = req
 
-    const params = author ? {path: 'author'} : null
-
-    const collections = await Collection.find({author: currentUserId}).populate(params)
+    const collections = await Collection.find({author: currentUserId})
 
     res.status(200).json({
         status: 'success',
