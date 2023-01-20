@@ -1,13 +1,13 @@
 const {Collection} = require("../../models");
 
 
-const create = async (req, res) => {
+const createCollection = async (req, res) => {
     const {user: currentUser} = req
     const {_id: currentUserId} = currentUser
 
     console.log(req.body)
 
-    const collection = await Collection.create({author: currentUserId, ...req.body})
+    const collection = await Collection.create({authors: [currentUserId], ...req.body})
     currentUser.collections.push(collection._id)
     await currentUser.save()
 
@@ -21,4 +21,4 @@ const create = async (req, res) => {
     })
 }
 
-module.exports = create
+module.exports = createCollection

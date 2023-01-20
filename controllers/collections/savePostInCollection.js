@@ -1,14 +1,45 @@
-const {Post, User} = require("../../models");
-const {Conflict} = require("http-errors");
+const {Post, User, Collection} = require("../../models");
+const {Conflict, NotFound} = require("http-errors");
 
 
 const savePostInCollection = async (req, res) => {
-    const {id: postId} = req.params
-    const {_id: userId} = req.user
-    console.log(userId)
+    const {postId, collectionId} = req.params
 
+    const post = await Post.findById(postId)
+    if (!post) {
+        throw new NotFound('Post no exists')
+    }
 
-    res.status(204).send()
+    const collection = await Collection.findById(collectionId)
+    if (!collection) {
+        throw new NotFound('Collection no exists')
+    }
+
+    const isPostExistsInCollection = collection.posts.some((el) => el.toString() === postId)
+    if (isPostExistsInCollection) {
+        throw new NotFound(`This post already saved in ${collection.title}`)
+    }
+
+    await Collection.findByIdAndUpdate(collectionId, {
+        $push: {
+            posts: postId
+        }
+    })
+
+    await Post.findByIdAndUpdate(postId, {
+        $inc: {
+            savesCount: 1
+        }
+    })
+
+    res.status(201).json({
+        status: 'success',
+        code: 201,
+        message: 'Successfully saved',
+        data: {
+            post: post
+        }
+    })
 }
 
 module.exports = savePostInCollection

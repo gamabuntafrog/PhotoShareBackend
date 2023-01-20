@@ -31,7 +31,11 @@ const deleteCollection = async (req, res) => {
 
     await Collection.findByIdAndDelete(collectionId)
 
-    res.status(204).send()
+    res.status(201).json({
+        code: 201,
+        status: 'success',
+        message: 'Successfully deleted'
+    })
 }
 
 module.exports = deleteCollection

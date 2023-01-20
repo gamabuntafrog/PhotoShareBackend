@@ -5,7 +5,7 @@ const getPopulatedCollection = async (req, res) => {
     const {id: collectionId} = req.params
     const {currentUserId} = req
 
-    const collection = await Collection.findById(collectionId).populate('author').populate({
+    const collection = await Collection.findById(collectionId).populate('authors').populate({
         path: 'posts',
         options: {
             sort: {createdAt: -1}
@@ -15,8 +15,12 @@ const getPopulatedCollection = async (req, res) => {
 
     const currentUser = await User.findById(currentUserId).populate('collections')
 
-    const {_id: authorId, avatar: {url: avatarUrl}, username, subscribers} = collection.author
-    const validatedAuthor = {_id: authorId, avatar: avatarUrl, username, subscribersCount: subscribers.length}
+    const validatedAuthors = collection.authors.map(({_id: authorId, avatar: {url: avatarUrl}, username, subscribers}) => {
+        return {_id: authorId, avatar: avatarUrl, username, subscribersCount: subscribers.length}
+    })
+    // {_id: authorId, avatar: {url: avatarUrl}, username, subscribers}
+    // {_id: authorId, avatar: avatarUrl, username, subscribersCount: subscribers.length}
+    // const validatedAuthors =
 
     const validatedPosts = collection.posts.map((post) => {
         const isLiked = post.usersLiked.some((id) => id.toString() === currentUserId.toString())
@@ -59,7 +63,7 @@ const getPopulatedCollection = async (req, res) => {
         data: {
             collection: {
                 ...collection.toObject(),
-                author: validatedAuthor,
+                authors: validatedAuthors,
                 posts: validatedPosts
             }
         }

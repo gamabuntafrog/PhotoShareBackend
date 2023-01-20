@@ -1,10 +1,21 @@
 const {model, Schema} = require("mongoose");
 
 const collectionSchema = Schema({
-    author: {
-        type: Schema.Types.ObjectId,
-        ref: 'user',
+    // author: {
+    //     type: Schema.Types.ObjectId,
+    //     ref: 'user',
+    //     required: true
+    // },
+    authors: {
+        type: [{
+            type: Schema.Types.ObjectId,
+            ref: 'user',
+        }],
         required: true
+    },
+    isPrivate: {
+        type: Schema.Types.Boolean,
+        default: false,
     },
     title: {
         type: String,

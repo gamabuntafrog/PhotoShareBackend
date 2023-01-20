@@ -1,5 +1,6 @@
-const {Post, Collection} = require('../../models')
+const {Post, Collection, User} = require('../../models')
 const {log} = require("debug");
+const {NotFound} = require('http-errors')
 
 const findOneById = async (req, res) => {
     const {currentUserId} = req
@@ -17,13 +18,19 @@ const findOneById = async (req, res) => {
         }
     })
 
+    if (!post) {
+        throw new NotFound('Post does not exist')
+    }
+
+    const currentUser = await User.findById(currentUserId).populate('collections')
+
     const {_id, author, title, image: {url}, body, tags, savesCount, likesCount} = post
     const {_id: authorId, avatar: {url: avatarUrl}, username, subscribers} = author
 
     const isLiked = post.usersLiked.some((id) => id.toString() === currentUserId.toString())
-    const isSomewhereSaved = author.collections.some(({posts}) => posts.find((id) => id.toString() === postId.toString()))
+    const isSomewhereSaved = currentUser.collections.some(({posts}) => posts.find((id) => id.toString() === postId.toString()))
 
-    const savesInfo = author.collections.map(({title, posts, _id}) => {
+    const savesInfo = currentUser.collections.map(({title, posts, _id}) => {
         const isPostInCollection = posts.find((id) => id.toString() === postId.toString())
 
         if (isPostInCollection) {

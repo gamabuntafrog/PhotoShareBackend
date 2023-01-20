@@ -1,19 +1,17 @@
-const create = require('./create')
+const createCollection = require('./createCollection')
 const getCurrent = require('./getCurrent')
 const getPopulatedCollection = require('./getPopulatedCollection')
-const likePostInCollection = require('./likePostInCollection')
-const unlikePostInCollection = require('./unlikePostInCollection')
 const savePostInCollection = require('./savePostInCollection')
-const unsavePostInCollection = require('./unsavePostInCollection')
+const deletePostFromCollection = require('./deletePostFromCollection')
 const deleteCollection = require('./deleteCollection')
+const addAuthorToCollection = require('./addAuthorToCollection')
 
 module.exports = {
-    create,
+    createCollection,
     getCurrent,
     getPopulatedCollection,
-    likePostInCollection,
-    unlikePostInCollection,
     savePostInCollection,
-    unsavePostInCollection,
-    deleteCollection
+    deletePostFromCollection,
+    deleteCollection,
+    addAuthorToCollection
 }

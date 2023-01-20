@@ -1,9 +1,9 @@
+const {Conflict, NotFound} = require("http-errors");
 const {Post, User, Collection} = require("../../models");
-const {NotFound, Conflict} = require('http-errors')
 
-const addToSaved = async (req, res) => {
-    const {id: postId, collectionId} = req.params
-    const {currentUserId} = req
+const deletePostFromCollection = async (req, res) => {
+    const {postId, collectionId} = req.params
+    const {_id: currentUserId} = req.user
 
     const post = await Post.findById(postId)
     if (!post) {
@@ -16,30 +16,27 @@ const addToSaved = async (req, res) => {
     }
 
     const isPostExistsInCollection = collection.posts.some((el) => el.toString() === postId)
-    if (isPostExistsInCollection) {
-        throw new NotFound(`This post already saved in ${collection.title}`)
+    if (!isPostExistsInCollection) {
+        throw new NotFound(`This post already not saved in ${collection.title}`)
     }
 
     await Collection.findByIdAndUpdate(collectionId, {
-        $push: {
+        $pull: {
             posts: postId
         }
     })
 
     await Post.findByIdAndUpdate(postId, {
         $inc: {
-            savesCount: 1
+            savesCount: -1
         }
     })
 
     res.status(201).json({
-        status: 'success',
         code: 201,
-        data: {
-            post: post
-        }
+        status: 'success',
+        message: 'Successfully unsaved'
     })
-
 }
 
-module.exports = addToSaved
+module.exports = deletePostFromCollection

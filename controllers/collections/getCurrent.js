@@ -4,7 +4,7 @@ const {Collection} = require("../../models");
 const getCurrent = async (req, res) => {
     const {currentUserId} = req
 
-    const collections = await Collection.find({author: currentUserId})
+    const collections = await Collection.find({authors: [currentUserId]})
 
     res.status(200).json({
         status: 'success',

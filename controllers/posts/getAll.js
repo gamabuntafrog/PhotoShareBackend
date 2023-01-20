@@ -1,4 +1,4 @@
-const {Post} = require('../../models')
+const {Post, User} = require('../../models')
 
 const getAll = async (req, res) => {
     const {currentUserId} = req
@@ -10,6 +10,7 @@ const getAll = async (req, res) => {
         }
     })
 
+    const currentUser = await User.findById(currentUserId).populate('collections')
 
 
     // .filter(post => post.author !== null)
@@ -18,9 +19,9 @@ const getAll = async (req, res) => {
         const {_id: authorId, avatar: {url: avatarUrl}, username} = author
 
         const isLiked = post.usersLiked.some((id) => id.toString() === currentUserId.toString())
-        const isSomewhereSaved = author.collections.some(({posts}) => posts.find((id) => id.toString() === postId.toString()))
+        const isSomewhereSaved = currentUser.collections.some(({posts}) => posts.find((id) => id.toString() === postId.toString()))
 
-        const savesInfo = author.collections.map(({title, posts, _id}) => {
+        const savesInfo = currentUser.collections.map(({title, posts, _id}) => {
             const isPostInCollection = posts.find((id) => id.toString() === postId.toString())
 
             if (isPostInCollection) {
