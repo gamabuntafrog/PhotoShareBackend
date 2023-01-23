@@ -5,6 +5,8 @@ const savePostInCollection = require('./savePostInCollection')
 const deletePostFromCollection = require('./deletePostFromCollection')
 const deleteCollection = require('./deleteCollection')
 const addAuthorToCollection = require('./addAuthorToCollection')
+const deleteAuthorFromCollection = require('./deleteAuthorFromCollection')
+const deleteCurrentUserFromCollection = require('./deleteCurrentUserFromCollection')
 
 module.exports = {
     createCollection,
@@ -13,5 +15,7 @@ module.exports = {
     savePostInCollection,
     deletePostFromCollection,
     deleteCollection,
-    addAuthorToCollection
+    addAuthorToCollection,
+    deleteAuthorFromCollection,
+    deleteCurrentUserFromCollection
 }

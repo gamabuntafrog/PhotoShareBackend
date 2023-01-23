@@ -18,6 +18,7 @@ router.post('/:collectionId/authors/:authorId', validateObjectId(), ctrlWrapper(
 
 router.delete('/:collectionId/authors/:authorId', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.deleteAuthorFromCollection))
 
+router.delete('/:collectionId/authors', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.deleteCurrentUserFromCollection))
 
 router.post('/', validate(collectionValidationSchema), ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.createCollection))
 

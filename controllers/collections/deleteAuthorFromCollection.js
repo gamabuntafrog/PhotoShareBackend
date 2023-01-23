@@ -12,13 +12,13 @@ const addAuthorToCollection = async (req, res) => {
         throw new NotFound('Collection does not exists')
     }
 
-    const isCurrentUserAuthorOfCollection = collection.authors.some((id) => id.toString() === currentUserId)
+    const isCurrentUserAuthorOfCollection = collection.authors.some((id) => id.toString() === currentUserId.toString())
 
     if (!isCurrentUserAuthorOfCollection) {
         throw new Conflict('You dont have permission')
     }
 
-    const isAuthorAlreadyExists = collection.authors.some((id) => id.toString() === authorId)
+    const isAuthorAlreadyExists = collection.authors.some((id) => id.toString() === authorId.toString())
 
     if (!isAuthorAlreadyExists) {
         throw new Conflict('User already not author')
@@ -39,7 +39,7 @@ const addAuthorToCollection = async (req, res) => {
     res.status(201).json({
         code: 201,
         status: 'success',
-        messsage: 'Successfully deleted'
+        message: 'Successfully deleted'
     })
 }
 

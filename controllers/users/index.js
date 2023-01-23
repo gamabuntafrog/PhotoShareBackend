@@ -5,7 +5,7 @@ const getSubscribes = require('./getSubscribes')
 const getCurrent = require('./getCurrent')
 const getById = require('./getById')
 const updateCurrent = require('./updateCurrent')
-
+const getUsersForAddInCollection = require('./getUsersForAddInCollection')
 
 module.exports = {
     getAll,
@@ -14,5 +14,6 @@ module.exports = {
     getSubscribes,
     getCurrent,
     getById,
-    updateCurrent
+    updateCurrent,
+    getUsersForAddInCollection
 }

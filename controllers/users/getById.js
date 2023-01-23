@@ -27,7 +27,7 @@ const getById = async (req, res) => {
 
 
     const formattedCollections = user.collections.map((collection) => {
-        const {_id, title, posts} = collection
+        const {_id, title, posts, authors} = collection
 
         const formattedPosts = posts.map((post) => {
             const {_id, image: {url}} = post
@@ -41,7 +41,8 @@ const getById = async (req, res) => {
         const formateedCollection = {
             _id,
             title,
-            posts: formattedPosts
+            posts: formattedPosts,
+            authors
         }
 
         return formateedCollection

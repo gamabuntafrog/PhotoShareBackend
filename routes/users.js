@@ -6,6 +6,8 @@ const {updateUserValidationSchema} = require("../shemas/user");
 
 router.get('/', ctrlWrapper(ctrl.getAll));
 
+router.get('/search', ctrlWrapper(auth), ctrlWrapper(ctrl.getUsersForAddInCollection))
+
 router.get('/current', ctrlWrapper(auth), ctrlWrapper(ctrl.getCurrent))
 
 router.patch('/current', ctrlWrapper(auth), validate(updateUserValidationSchema), ctrlWrapper(ctrl.updateCurrent))
@@ -21,8 +23,6 @@ router.post('/:id/subscribes', validateObjectId(), ctrlWrapper(auth), ctrlWrappe
 router.delete('/:id/subscribes', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(ctrl.deleteFromSubscribes))
 
 router.get('/subscribes', ctrlWrapper(auth), ctrlWrapper(ctrl.getSubscribes))
-
-
 
 
 module.exports = router;

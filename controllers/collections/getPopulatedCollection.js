@@ -18,9 +18,7 @@ const getPopulatedCollection = async (req, res) => {
     const validatedAuthors = collection.authors.map(({_id: authorId, avatar: {url: avatarUrl}, username, subscribers}) => {
         return {_id: authorId, avatar: avatarUrl, username, subscribersCount: subscribers.length}
     })
-    // {_id: authorId, avatar: {url: avatarUrl}, username, subscribers}
-    // {_id: authorId, avatar: avatarUrl, username, subscribersCount: subscribers.length}
-    // const validatedAuthors =
+
 
     const validatedPosts = collection.posts.map((post) => {
         const isLiked = post.usersLiked.some((id) => id.toString() === currentUserId.toString())
