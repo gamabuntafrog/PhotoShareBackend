@@ -1,22 +1,27 @@
 const Collection = require("../../models/collection");
 const {Conflict, NotFound} = require("http-errors");
 const {User} = require("../../models");
+const findOutIsCurrentUserAdmin = require("./middlewares/findOutIsCurrentUserAdmin");
 
 
 const deleteCollection = async (req, res) => {
     const {id: collectionId} = req.params
-    const {user: currentUser} = req
+    const {currentUser, currentUserId} = req
 
-    const isCollectionExists = !!await Collection.findById(collectionId)
+    const collection = await Collection.findById(collectionId)
 
-    if (!isCollectionExists) {
-        throw new NotFound('collection no exists')
+    if (!collection) {
+        throw new NotFound('Collection does not exist')
+    }
+
+    if (!findOutIsCurrentUserAdmin(collection.authors, currentUserId)) {
+        throw new Conflict('You dont have permission')
     }
 
     const isUserHasCollection = currentUser.collections.some((id) => id.toString() === collectionId)
 
     if (!isUserHasCollection) {
-        throw new NotFound('user does not have this collection')
+        throw new NotFound('User does not have this collection')
     }
 
     // delete from user

@@ -1,15 +1,22 @@
 const {model, Schema} = require("mongoose");
 
+const roles = ['AUTHOR', 'ADMIN']
+
+const isPrivate = true
+const viewers = ['id', 'id1']
+// const requests = ['id', 'id1']
+
 const collectionSchema = Schema({
-    // author: {
-    //     type: Schema.Types.ObjectId,
-    //     ref: 'user',
-    //     required: true
-    // },
     authors: {
         type: [{
-            type: Schema.Types.ObjectId,
-            ref: 'user',
+            user: {
+                type: Schema.Types.ObjectId,
+                ref: 'user',
+            },
+            roles: [{
+                type: String,
+                default: 'ADMIN'
+            }]
         }],
         required: true
     },
@@ -17,6 +24,14 @@ const collectionSchema = Schema({
         type: Schema.Types.Boolean,
         default: false,
     },
+    viewers: [{
+        type: Schema.Types.ObjectId,
+        ref: 'user'
+    }],
+    requests: [{
+        type: Schema.Types.ObjectId,
+        ref: 'user'
+    }],
     title: {
         type: String,
         required: true

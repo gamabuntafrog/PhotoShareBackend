@@ -1,10 +1,14 @@
 const Collection = require("../../models/collection");
 const {Conflict} = require('http-errors')
 const {User} = require("../../models");
+const findOutIsCurrentUserAdmin = require('./middlewares/findOutIsCurrentUserAdmin')
+
 
 const addAuthorToCollection = async (req, res) => {
     const {collectionId, authorId} = req.params
-    const {currentUserId, currentUser} = req
+    const {role = 'AUTHOR'} = req.query
+    const {currentUserId} = req
+
 
     const collection = await Collection.findById(collectionId)
 
@@ -12,23 +16,33 @@ const addAuthorToCollection = async (req, res) => {
         throw new NotFound('Collection does not exists')
     }
 
-    const isCurrentUserAuthorOfCollection = collection.authors.some((id) => id.toString() === currentUserId.toString())
-
-    if (!isCurrentUserAuthorOfCollection) {
+    if (!findOutIsCurrentUserAdmin(collection.authors, currentUserId)) {
         throw new Conflict('You dont have permission')
     }
 
-    const isAuthorAlreadyExists = collection.authors.some((id) => id.toString() === authorId.toString())
+    const isAuthorAlreadyExists = collection.authors.some(({user: userId}) => userId.toString() === authorId.toString())
 
     if (isAuthorAlreadyExists) {
-        throw new Conflict('User already author')
+        throw new Conflict('Author already author')
+    }
+
+    const isAuthorAlreadyHasThisRole = collection.authors
+        .some(({user: userId, roles}) =>
+            userId.toString() === authorId.toString() && roles.includes(role))
+
+    if (isAuthorAlreadyHasThisRole) {
+        throw new Conflict('Author already has this role')
     }
 
     await Collection.findByIdAndUpdate(collectionId, {
         $push: {
-            authors: authorId
+            authors: {
+                user: authorId,
+                roles: [role]
+            }
         }
     })
+
 
     await User.findByIdAndUpdate(authorId, {
         $push: {

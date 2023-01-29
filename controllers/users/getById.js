@@ -1,8 +1,9 @@
 const {User} = require("../../models");
+const {NotFound} = require("http-errors");
 
 
 const getById = async (req, res) => {
-
+    const {currentUserId} = req
     const {id} = req.params
     const {posts, collections} = req.query
 
@@ -22,12 +23,29 @@ const getById = async (req, res) => {
 
     const user = await User.findById(id).populate(collectionsParams)
 
-    const {_id: authorId, avatar: {url: avatarUrl}, username, subscribes, subscribers, posts: userPosts, createdAt} = user
+    const {
+        _id: authorId,
+        avatar: {url: avatarUrl},
+        username,
+        subscribes,
+        subscribers,
+        posts: userPosts,
+        createdAt
+    } = user
 
+    const formattedCollections = user.collections.filter((collection) => {
+        if (!collection.isPrivate) return true
 
+        const isCurrentUserAuthorOfCollection = collection.authors
+            .some(({user: _id}) => _id.toString() === currentUserId.toString())
+        const isViewer = collection.viewers.some((id) => id.toString() === currentUserId.toString())
 
-    const formattedCollections = user.collections.map((collection) => {
+        if (isCurrentUserAuthorOfCollection || isViewer) return true
+
+        return false
+    }).map((collection) => {
         const {_id, title, posts, authors} = collection
+
 
         const formattedPosts = posts.map((post) => {
             const {_id, image: {url}} = post

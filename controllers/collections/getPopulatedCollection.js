@@ -1,11 +1,11 @@
 const {Collection, User} = require("../../models");
-
+const {NotFound, Conflict} = require('http-errors')
 
 const getPopulatedCollection = async (req, res) => {
     const {id: collectionId} = req.params
     const {currentUserId} = req
 
-    const collection = await Collection.findById(collectionId).populate('authors').populate({
+    const collection = await Collection.findById(collectionId).populate('authors.user').populate({
         path: 'posts',
         options: {
             sort: {createdAt: -1}
@@ -13,10 +13,34 @@ const getPopulatedCollection = async (req, res) => {
         populate: 'author'
     })
 
+    if (!collection) {
+        throw new NotFound('Collection does not exist')
+    }
+
+    const isCurrentUserAuthorOfCollection = collection.authors
+        .some(({user}) => user._id.toString() === currentUserId.toString())
+
+    const isCurrentUserAdminOfCollection = collection.authors
+        .some(({user, roles}) => user._id.toString() === currentUserId.toString() && roles.includes('ADMIN'))
+
+    const isViewer = collection.viewers.some((id) => id.toString() === currentUserId.toString())
+
+    if (collection.isPrivate) {
+        if (!isCurrentUserAuthorOfCollection && !isViewer) {
+            throw new NotFound('Collection does not exist')
+        }
+    }
+
+
     const currentUser = await User.findById(currentUserId).populate('collections')
 
-    const validatedAuthors = collection.authors.map(({_id: authorId, avatar: {url: avatarUrl}, username, subscribers}) => {
-        return {_id: authorId, avatar: avatarUrl, username, subscribersCount: subscribers.length}
+    const validatedAuthors = collection.authors.map(({user, roles}) => {
+        const {_id: authorId, avatar: {url: avatarUrl}, username, subscribers} = user
+
+        const isAdmin = roles.includes('ADMIN')
+        const isAuthor = roles.includes('AUTHOR')
+
+        return {_id: authorId, avatar: avatarUrl, username, subscribersCount: subscribers.length, isAuthor, isAdmin}
     })
 
 
@@ -35,6 +59,7 @@ const getPopulatedCollection = async (req, res) => {
         })
 
         const {_id, author, title, image: {url}, body, tags, savesCount, likesCount} = post
+
         const {_id: authorId, avatar: {url: avatarUrl}, username} = author
         const validatedAuthor = {_id: authorId, avatar: avatarUrl, username}
         const validatedPost = {
@@ -56,13 +81,15 @@ const getPopulatedCollection = async (req, res) => {
 
 
     res.status(200).json({
-        satus: 'success',
+        status: 'success',
         code: 200,
         data: {
             collection: {
                 ...collection.toObject(),
                 authors: validatedAuthors,
-                posts: validatedPosts
+                posts: validatedPosts,
+                isAuthor: isCurrentUserAuthorOfCollection,
+                isAdmin: isCurrentUserAdminOfCollection,
             }
         }
     })

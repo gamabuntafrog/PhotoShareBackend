@@ -3,9 +3,10 @@ const {Conflict} = require('http-errors')
 const {User} = require("../../models");
 const findOutIsCurrentUserAdmin = require('./middlewares/findOutIsCurrentUserAdmin')
 
-const addAuthorToCollection = async (req, res) => {
+const changeUserRole = async (req, res) => {
     const {collectionId, authorId} = req.params
-    const {currentUserId, currentUser} = req
+    const {role = 'AUTHOR'} = req.query
+    const {currentUserId} = req
 
     const collection = await Collection.findById(collectionId)
 
@@ -20,28 +21,30 @@ const addAuthorToCollection = async (req, res) => {
     const isAuthorAlreadyExists = collection.authors.some(({user: userId}) => userId.toString() === authorId.toString())
 
     if (!isAuthorAlreadyExists) {
-        throw new Conflict('User already not author')
+        throw new Conflict('Author already not author')
     }
 
-    await Collection.findByIdAndUpdate(collectionId, {
-        $pull: {
-            authors: {
-                user: authorId
-            }
+    const isAuthorAlreadyHasThisRole = collection.authors
+        .some(({user: userId, roles}) =>
+            userId.toString() === authorId.toString() && roles.includes(role))
+
+    if (isAuthorAlreadyHasThisRole) {
+        throw new Conflict('Author already has this role')
+    }
+
+    collection.authors.forEach((el) => {
+        if (el.user.toString() === authorId.toString()) {
+            el.roles = [role]
         }
     })
 
-    await User.findByIdAndUpdate(authorId, {
-        $pull: {
-            collections: collectionId
-        }
-    })
+    await collection.save()
 
     res.status(201).json({
         code: 201,
         status: 'success',
-        message: 'Successfully deleted'
+        message: 'Successfully changed'
     })
 }
 
-module.exports = addAuthorToCollection
+module.exports = changeUserRole

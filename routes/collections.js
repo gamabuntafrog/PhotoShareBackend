@@ -1,12 +1,15 @@
 
 const express = require('express')
-const {ctrlWrapper, auth, validateObjectId, validate} = require("../middlewares");
+const {ctrlWrapper, auth, validateObjectId, validate, validateRole} = require("../middlewares");
 const router = express.Router()
 
 const {collections: collectionsCtrl, ctrl}= require('../controllers')
 const {collectionValidationSchema} = require("../shemas/collection");
+const {roleValidationSchema} = require("../shemas");
 
-router.get('/', ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.getCurrent))
+router.get('/', ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.getCollections))
+
+router.get('/current', ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.getCurrent))
 
 router.get('/:id', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.getPopulatedCollection))
 
@@ -14,13 +17,17 @@ router.post('/:collectionId/saves/:postId', validateObjectId(), ctrlWrapper(auth
 
 router.delete('/:collectionId/saves/:postId', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.deletePostFromCollection))
 
-router.post('/:collectionId/authors/:authorId', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.addAuthorToCollection))
+router.post('/:collectionId/authors/:authorId', validateObjectId(), ctrlWrapper(auth), validateRole(roleValidationSchema), ctrlWrapper(collectionsCtrl.addAuthorToCollection))
 
 router.delete('/:collectionId/authors/:authorId', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.deleteAuthorFromCollection))
+
+router.patch('/:collectionId/authors/:authorId/roles', validateObjectId(), ctrlWrapper(auth), validateRole(roleValidationSchema), ctrlWrapper(collectionsCtrl.changeAuthorRole))
 
 router.delete('/:collectionId/authors', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.deleteCurrentUserFromCollection))
 
 router.post('/', validate(collectionValidationSchema), ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.createCollection))
+
+router.patch('/:id/isPrivate', ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.changeIsPrivate))
 
 router.delete('/:id', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.deleteCollection))
 

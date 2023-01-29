@@ -1,15 +1,16 @@
-const {Collection} = require("../../models");
+const {Collection, User} = require("../../models");
 
 
 const createCollection = async (req, res) => {
-    const {user: currentUser} = req
-    const {_id: currentUserId} = currentUser
+    const {currentUserId} = req
 
-    console.log(req.body)
+    const collection = await Collection.create({authors: [{user: currentUserId, roles: ['ADMIN']}], ...req.body})
 
-    const collection = await Collection.create({authors: [currentUserId], ...req.body})
-    currentUser.collections.push(collection._id)
-    await currentUser.save()
+    await User.findByIdAndUpdate(currentUserId, {
+        $push: {
+            collections: collection._id
+        }
+    })
 
     res.status(201).json({
         status: 'success',
