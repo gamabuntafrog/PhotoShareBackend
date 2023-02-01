@@ -1,9 +1,13 @@
-const {User} = require("../../models");
+const {User, Collection} = require("../../models");
 
 
 const getUsersForAddInCollection = async (req, res) => {
 
     const {username, collectionId} = req.query
+
+    const collection = await Collection.findById(collectionId)
+
+    const authors = collection.authors.map((author) => author.user)
 
     const users = await User.find({
         // find by username
@@ -11,8 +15,8 @@ const getUsersForAddInCollection = async (req, res) => {
             $regex: username
         },
         // find users which not authors of this collection
-        collections: {
-            $ne: collectionId
+        _id: {
+            $nin: [...authors, ...collection.viewers]
         }
     })
 

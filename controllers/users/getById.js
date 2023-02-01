@@ -21,7 +21,16 @@ const getById = async (req, res) => {
         }
     } : null
 
-    const user = await User.findById(id).populate(collectionsParams)
+    const user = await User.findById(id).populate(collectionsParams).populate({
+        path: 'allowedToViewCollections',
+        populate: {
+            path: 'posts',
+            options: {
+                sort: {createdAt: -1},
+                limit: 3
+            },
+        }
+    })
 
     const {
         _id: authorId,
@@ -32,6 +41,28 @@ const getById = async (req, res) => {
         posts: userPosts,
         createdAt
     } = user
+
+    const formattedCollectionForView = user.allowedToViewCollections.map((collection) => {
+        const {_id, title, posts, authors} = collection
+
+        const formattedPosts = posts.map((post) => {
+            const {_id, image: {url}} = post
+
+            return {
+                _id,
+                image: url
+            }
+        })
+
+        const formattedCollection = {
+            _id,
+            title,
+            posts: formattedPosts,
+            authors,
+        }
+
+        return formattedCollection
+    })
 
     const formattedCollections = user.collections.filter((collection) => {
         if (!collection.isPrivate) return true
@@ -56,14 +87,14 @@ const getById = async (req, res) => {
             }
         })
 
-        const formateedCollection = {
+        const formattedCollection = {
             _id,
             title,
             posts: formattedPosts,
             authors
         }
 
-        return formateedCollection
+        return formattedCollection
     })
 
     const formattedUser = {
@@ -74,7 +105,8 @@ const getById = async (req, res) => {
         subscribesCount: subscribes.length,
         postsCount: userPosts.length,
         collections: formattedCollections,
-        createdAt
+        createdAt,
+        ...(id.toString() === currentUserId.toString() && {allowedToViewCollections: formattedCollectionForView})
     }
 
     res.status(200).json({

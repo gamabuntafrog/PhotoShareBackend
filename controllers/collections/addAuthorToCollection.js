@@ -23,7 +23,7 @@ const addAuthorToCollection = async (req, res) => {
     const isAuthorAlreadyExists = collection.authors.some(({user: userId}) => userId.toString() === authorId.toString())
 
     if (isAuthorAlreadyExists) {
-        throw new Conflict('Author already author')
+        throw new Conflict('User already author')
     }
 
     const isAuthorAlreadyHasThisRole = collection.authors
@@ -32,6 +32,21 @@ const addAuthorToCollection = async (req, res) => {
 
     if (isAuthorAlreadyHasThisRole) {
         throw new Conflict('Author already has this role')
+    }
+
+    const isUserViewer = collection.viewers.some((userId) => userId.toString() === authorId.toString())
+
+    if (isUserViewer) {
+        await Collection.findByIdAndUpdate(collectionId, {
+            $pull: {
+                viewers: authorId
+            }
+        })
+        await User.findByIdAndUpdate(viewerId, {
+            $pull: {
+                viewers: collectionId
+            }
+        })
     }
 
     await Collection.findByIdAndUpdate(collectionId, {

@@ -32,13 +32,13 @@ const changeUserRole = async (req, res) => {
         throw new Conflict('Author already has this role')
     }
 
-    collection.authors.forEach((el) => {
-        if (el.user.toString() === authorId.toString()) {
-            el.roles = [role]
+    const index = collection.authors.findIndex(({user: userId}) => userId.toString() === authorId.toString())
+
+    await Collection.findByIdAndUpdate(collectionId, {
+        $set: {
+            [`authors.${index}.roles`]: [role]
         }
     })
-
-    await collection.save()
 
     res.status(201).json({
         code: 201,

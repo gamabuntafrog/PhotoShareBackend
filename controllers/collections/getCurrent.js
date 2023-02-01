@@ -1,14 +1,12 @@
-const {Collection} = require("../../models");
+const {Collection, User} = require("../../models");
 
 
 const getCurrent = async (req, res) => {
     const {currentUserId} = req
 
-    const collections = await Collection.find({
-        authors: {
-            $in: [currentUserId]
-        }
-    })
+    const currentUser = await User.findById(currentUserId).populate('collections')
+
+    const {collections} = currentUser
 
     res.status(200).json({
         status: 'success',

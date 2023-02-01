@@ -3,7 +3,8 @@ const objectId = Joi.object({
     id: Joi.string().length(24),
     collectionId: Joi.string().length(24),
     postId: Joi.string().length(24),
-    authorId: Joi.string().length(24)
+    authorId: Joi.string().length(24),
+    viewerId: Joi.string().length(24)
 })
 
 

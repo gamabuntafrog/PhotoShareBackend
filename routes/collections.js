@@ -25,6 +25,10 @@ router.patch('/:collectionId/authors/:authorId/roles', validateObjectId(), ctrlW
 
 router.delete('/:collectionId/authors', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.deleteCurrentUserFromCollection))
 
+router.post('/:collectionId/viewers/:viewerId', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.addViewerToCollection))
+
+router.delete('/:collectionId/viewers/:viewerId', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.deleteViewerFromCollection))
+
 router.post('/', validate(collectionValidationSchema), ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.createCollection))
 
 router.patch('/:id/isPrivate', ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.changeIsPrivate))

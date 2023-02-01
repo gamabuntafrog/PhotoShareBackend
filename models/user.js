@@ -33,6 +33,9 @@ const userSchema = Schema({
     collections: {
         type: [{type: Schema.Types.ObjectId, ref: 'collection'}]
     },
+    allowedToViewCollections: {
+        type: [{type: Schema.Types.ObjectId, ref: 'collection'}]
+    },
     posts: {
         type: [{type: Schema.Types.ObjectId, ref: 'post'}]
     },

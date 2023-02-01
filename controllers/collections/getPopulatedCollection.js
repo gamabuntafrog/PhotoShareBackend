@@ -5,7 +5,7 @@ const getPopulatedCollection = async (req, res) => {
     const {id: collectionId} = req.params
     const {currentUserId} = req
 
-    const collection = await Collection.findById(collectionId).populate('authors.user').populate({
+    const collection = await Collection.findById(collectionId).populate('authors.user').populate('viewers').populate({
         path: 'posts',
         options: {
             sort: {createdAt: -1}
@@ -23,7 +23,7 @@ const getPopulatedCollection = async (req, res) => {
     const isCurrentUserAdminOfCollection = collection.authors
         .some(({user, roles}) => user._id.toString() === currentUserId.toString() && roles.includes('ADMIN'))
 
-    const isViewer = collection.viewers.some((id) => id.toString() === currentUserId.toString())
+    const isViewer = collection.viewers.some(({_id}) => _id.toString() === currentUserId.toString())
 
     if (collection.isPrivate) {
         if (!isCurrentUserAuthorOfCollection && !isViewer) {
@@ -43,6 +43,11 @@ const getPopulatedCollection = async (req, res) => {
         return {_id: authorId, avatar: avatarUrl, username, subscribersCount: subscribers.length, isAuthor, isAdmin}
     })
 
+    const validatedViewers = collection.viewers.map((viewer) => {
+        const {_id: authorId, avatar: {url: avatarUrl}, username} = viewer
+
+        return {_id: authorId, avatar: avatarUrl, username}
+    })
 
     const validatedPosts = collection.posts.map((post) => {
         const isLiked = post.usersLiked.some((id) => id.toString() === currentUserId.toString())
@@ -84,12 +89,15 @@ const getPopulatedCollection = async (req, res) => {
         status: 'success',
         code: 200,
         data: {
+            currentUserStatus: {
+                isAuthor: isCurrentUserAuthorOfCollection,
+                isAdmin: isCurrentUserAdminOfCollection,
+            },
             collection: {
                 ...collection.toObject(),
                 authors: validatedAuthors,
+                viewers: validatedViewers,
                 posts: validatedPosts,
-                isAuthor: isCurrentUserAuthorOfCollection,
-                isAdmin: isCurrentUserAdminOfCollection,
             }
         }
     })
