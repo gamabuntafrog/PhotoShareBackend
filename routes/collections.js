@@ -31,6 +31,8 @@ router.delete('/:collectionId/viewers/:viewerId', validateObjectId(), ctrlWrappe
 
 router.post('/', validate(collectionValidationSchema), ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.createCollection))
 
+router.patch('/:id', ctrlWrapper(auth), validate(collectionValidationSchema), ctrlWrapper(collectionsCtrl.changeCollectionInfo))
+
 router.patch('/:id/isPrivate', ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.changeIsPrivate))
 
 router.delete('/:id', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.deleteCollection))

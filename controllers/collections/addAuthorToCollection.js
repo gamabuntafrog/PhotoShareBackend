@@ -42,9 +42,9 @@ const addAuthorToCollection = async (req, res) => {
                 viewers: authorId
             }
         })
-        await User.findByIdAndUpdate(viewerId, {
+        await User.findByIdAndUpdate(authorId, {
             $pull: {
-                viewers: collectionId
+                allowedToViewCollections: collectionId
             }
         })
     }
