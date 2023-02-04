@@ -11,6 +11,7 @@ router.get('/', ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.getCollections))
 
 router.get('/current', ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.getCurrent))
 
+
 router.get('/:id', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.getPopulatedCollection))
 
 router.post('/:collectionId/saves/:postId', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.savePostInCollection))
@@ -23,7 +24,7 @@ router.delete('/:collectionId/authors/:authorId', validateObjectId(), ctrlWrappe
 
 router.patch('/:collectionId/authors/:authorId/roles', validateObjectId(), ctrlWrapper(auth), validateRole(roleValidationSchema), ctrlWrapper(collectionsCtrl.changeAuthorRole))
 
-router.delete('/:collectionId/authors', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.deleteCurrentUserFromCollection))
+router.delete('/:collectionId/current', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.deleteCurrentUserFromCollection))
 
 router.post('/:collectionId/viewers/:viewerId', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.addViewerToCollection))
 

@@ -6,6 +6,10 @@ const getCurrent = require('./getCurrent')
 const getById = require('./getById')
 const updateCurrent = require('./updateCurrent')
 const getUsersForAddInCollection = require('./getUsersForAddInCollection')
+const getCollectionsByUserId = require('./getCollectionsByUserId')
+const getAllowedToViewCollections = require('./getAllowedToViewCollections')
+const getPostsByUserId = require('./getPostsByUserId')
+
 
 module.exports = {
     getAll,
@@ -15,5 +19,8 @@ module.exports = {
     getCurrent,
     getById,
     updateCurrent,
-    getUsersForAddInCollection
+    getUsersForAddInCollection,
+    getCollectionsByUserId,
+    getAllowedToViewCollections,
+    getPostsByUserId
 }

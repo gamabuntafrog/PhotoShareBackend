@@ -35,7 +35,7 @@ const addViewerToCollection = async (req, res) => {
         })
 
         await User.findByIdAndUpdate(viewerId, {
-            $push: {
+            $pull: {
                 collections: collectionId
             }
         })

@@ -6,6 +6,12 @@ const {updateUserValidationSchema} = require("../shemas/user");
 
 router.get('/', ctrlWrapper(ctrl.getAll));
 
+router.get('/:id/collections', ctrlWrapper(auth), ctrlWrapper(ctrl.getCollectionsByUserId))
+
+router.get('/:id/allowedToViewCollections', ctrlWrapper(auth), ctrlWrapper(ctrl.getAllowedToViewCollections))
+
+router.get('/:id/posts', ctrlWrapper(auth), ctrlWrapper(ctrl.getPostsByUserId))
+
 router.get('/search', ctrlWrapper(auth), ctrlWrapper(ctrl.getUsersForAddInCollection))
 
 router.get('/current', ctrlWrapper(auth), ctrlWrapper(ctrl.getCurrent))

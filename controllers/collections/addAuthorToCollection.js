@@ -58,7 +58,6 @@ const addAuthorToCollection = async (req, res) => {
         }
     })
 
-
     await User.findByIdAndUpdate(authorId, {
         $push: {
             collections: collectionId

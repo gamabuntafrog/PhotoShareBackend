@@ -6,7 +6,7 @@ const findOutIsCurrentUserAdmin = require("./middlewares/findOutIsCurrentUserAdm
 
 const deleteCollection = async (req, res) => {
     const {id: collectionId} = req.params
-    const {currentUser, currentUserId} = req
+    const {currentUserId} = req
 
     const collection = await Collection.findById(collectionId)
 
@@ -18,23 +18,14 @@ const deleteCollection = async (req, res) => {
         throw new Conflict('You dont have permission')
     }
 
-    const isUserHasCollection = currentUser.collections.some((id) => id.toString() === collectionId)
+    await Collection.findByIdAndDelete(collectionId)
 
-    if (!isUserHasCollection) {
-        throw new NotFound('User does not have this collection')
-    }
-
-    // delete from user
-
-    await User.findByIdAndUpdate(currentUser._id, {
+    await User.findByIdAndUpdate(currentUserId, {
         $pull: {
             collections: collectionId
         }
     })
 
-    // delete collection
-
-    await Collection.findByIdAndDelete(collectionId)
 
     res.status(201).json({
         code: 201,
