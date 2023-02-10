@@ -10,13 +10,11 @@ router.get('/my', ctrlWrapper(auth), ctrlWrapper(ctrl.getMy))
 
 router.get('/saved', ctrlWrapper(auth), ctrlWrapper(ctrl.getSaved))
 
-router.get('/:id', ctrlWrapper(auth), ctrlWrapper(ctrl.findOneById))
-
 router.get('/authors/:username', ctrlWrapper(ctrl.findByUsername))
 
-router.get('/tags/:tag', ctrlWrapper(ctrl.findByTags))
+router.get('/search', ctrlWrapper(auth), ctrlWrapper(ctrl.getByTitle))
 
-router.get('/titles/:title', ctrlWrapper(ctrl.getByTitle))
+router.get('/:id', ctrlWrapper(auth), ctrlWrapper(ctrl.findOneById))
 
 router.post('/', validate(addPostValidationSchema), ctrlWrapper(auth), ctrlWrapper(ctrl.createPost))
 
@@ -25,7 +23,6 @@ router.delete('/:id', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(ctrl.de
 router.patch('/:id/like', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(ctrl.like))
 
 router.patch('/:id/unlike', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(ctrl.unlike))
-
 
 router.post('/:id/comments', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(commentsCtrl.addComment))
 

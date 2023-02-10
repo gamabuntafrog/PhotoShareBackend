@@ -4,7 +4,6 @@ const {users: ctrl, notifications: notificationsCtrl} = require('../controllers'
 const {ctrlWrapper, auth, validateObjectId, validate} = require('../middlewares')
 const {updateUserValidationSchema} = require("../shemas/user");
 
-router.get('/', ctrlWrapper(ctrl.getAll));
 
 router.get('/:id/collections', ctrlWrapper(auth), ctrlWrapper(ctrl.getCollectionsByUserId))
 
@@ -12,7 +11,11 @@ router.get('/:id/allowedToViewCollections', ctrlWrapper(auth), ctrlWrapper(ctrl.
 
 router.get('/:id/posts', ctrlWrapper(auth), ctrlWrapper(ctrl.getPostsByUserId))
 
-router.get('/search', ctrlWrapper(auth), ctrlWrapper(ctrl.getUsersForAddInCollection))
+router.get('/search', ctrlWrapper(ctrl.getUsersByUsername));
+
+router.get('/search/forAddInCollection', ctrlWrapper(auth), ctrlWrapper(ctrl.getUsersForAddInCollection))
+
+router.get('/search/forSearchBar', ctrlWrapper(ctrl.getUsersForSearchBar))
 
 router.get('/current', ctrlWrapper(auth), ctrlWrapper(ctrl.getCurrent))
 

@@ -9,7 +9,8 @@ const getUsersForAddInCollection = require('./getUsersForAddInCollection')
 const getCollectionsByUserId = require('./getCollectionsByUserId')
 const getAllowedToViewCollections = require('./getAllowedToViewCollections')
 const getPostsByUserId = require('./getPostsByUserId')
-
+const getUsersForSearchBar = require('./getUsersForSearchBar')
+const getUsersByUsername = require('./getUsersByUsername')
 
 module.exports = {
     getAll,
@@ -22,5 +23,7 @@ module.exports = {
     getUsersForAddInCollection,
     getCollectionsByUserId,
     getAllowedToViewCollections,
-    getPostsByUserId
+    getPostsByUserId,
+    getUsersForSearchBar,
+    getUsersByUsername
 }

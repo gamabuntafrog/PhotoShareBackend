@@ -13,7 +13,7 @@ const changeAuthorRole = require('./changeAuthorRole')
 const addViewerToCollection = require('./addViewerToCollection')
 const deleteViewerFromCollection = require('./deleteViewerFromCollection')
 const changeCollectionInfo = require('./changeCollectionInfo')
-
+const getCollectionsByTitle = require('./getCollectionsByTitle')
 
 module.exports = {
     createCollection,
@@ -31,4 +31,5 @@ module.exports = {
     addViewerToCollection,
     deleteViewerFromCollection,
     changeCollectionInfo,
+    getCollectionsByTitle
 }

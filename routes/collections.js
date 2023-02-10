@@ -11,8 +11,9 @@ router.get('/', ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.getCollections))
 
 router.get('/current', ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.getCurrent))
 
+router.get('/search', ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.getCollectionsByTitle))
 
-router.get('/:id', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.getPopulatedCollection))
+router.get('/:id', validateObjectId(), (auth), ctrlWrapper(collectionsCtrl.getPopulatedCollection))
 
 router.post('/:collectionId/saves/:postId', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.savePostInCollection))
 
