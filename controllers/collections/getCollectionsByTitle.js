@@ -2,13 +2,27 @@ const {Collection} = require("../../models");
 
 const getCollectionsByTitle = async (req, res) => {
     const {currentUserId} = req
-    const {title, tags = ''} = req.query
+    const {title} = req.query
+
+    const match = {
+        $or: [
+            {
+                title: {
+                    $regex: title
+                }
+            },
+            {
+                tags: {
+                    $elemMatch: {
+                        $regex: title
+                    }
+                },
+            }
+        ]
+    }
 
     const collections = await Collection.find({
-        title: {
-          $regex: title
-        },
-        $or: [{isPrivate: false}, {viewers: [currentUserId]}, {'authors.user': currentUserId}],
+        $or: [{isPrivate: false, ...match}, {viewers: [currentUserId], ...match}, {'authors.user': currentUserId, ...match}],
     }).populate({
         path: 'posts',
         options: {

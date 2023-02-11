@@ -2,13 +2,17 @@ const {Post, User} = require('../../models')
 
 const getAll = async (req, res) => {
     const {currentUserId} = req
+    const {page = 1} = req.query
+
+    const limit = 25
+    const skip = limit * (page - 1)
 
     const posts = await Post.find().sort({createdAt: -1}).populate({
         path: 'author',
         populate: {
             path: 'collections'
         }
-    })
+    }).limit(limit).skip(skip)
 
     const currentUser = await User.findById(currentUserId).populate('collections')
 

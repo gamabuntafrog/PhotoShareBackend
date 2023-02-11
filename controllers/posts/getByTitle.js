@@ -1,15 +1,25 @@
 const {Post, User} = require('../../models')
 
 
-
 const getByTitle = async (req, res) => {
     const {currentUserId} = req
     const {title} = req.query
 
     const posts = await Post.find({
-        title: {
-            $regex: title
-        }
+        $or: [
+            {
+                title: {
+                    $regex: title
+                }
+            },
+            {
+                tags: {
+                    $elemMatch: {
+                        $regex: title
+                    }
+                },
+            }
+        ]
     }).sort({createdAt: -1}).populate({
         path: 'author',
         populate: {
@@ -39,7 +49,19 @@ const getByTitle = async (req, res) => {
 
 
         const validatedAuthor = {_id: authorId, avatar: avatarUrl, username}
-        const validatedPost = {_id: postId, author: validatedAuthor, title, image: url, body, tags, savesCount, likesCount, isLiked, isSomewhereSaved, savesInfo}
+        const validatedPost = {
+            _id: postId,
+            author: validatedAuthor,
+            title,
+            image: url,
+            body,
+            tags,
+            savesCount,
+            likesCount,
+            isLiked,
+            isSomewhereSaved,
+            savesInfo
+        }
 
         return validatedPost
     })
