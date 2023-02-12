@@ -16,7 +16,7 @@ dotenv.config()
 
 
 const app = express();
-// mongodb+srv://gamabuntafrog:mgmyp9Nr9X7WT1VO@cluster0.arli7cu.mongodb.net/test
+
 const mongoose = require('mongoose')
 const {DB_HOST, SECRET_KEY} = process.env
 
@@ -28,7 +28,7 @@ mongoose.connect(DB_HOST).then(() => {
 })
 
 const cors = require('cors')
-const {collections} = require("./controllers");
+
 app.use(logger('dev'));
 app.use(cors())
 app.use(express.json({limit: '20mb'}));
