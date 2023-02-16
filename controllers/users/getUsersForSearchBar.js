@@ -7,7 +7,8 @@ const getUsersForSearchBar = async (req, res) => {
 
     const users = await User.find({
         username: {
-            $regex: username
+            $regex: username,
+            $options: 'i'
         },
     }).limit(10)
 

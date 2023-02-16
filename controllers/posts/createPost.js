@@ -36,7 +36,7 @@ const createPost = async (req, res) => {
     })
 
 
-    res.status(201).send({
+    res.status(201).json({
         code: 201,
         status: 'success',
         message: 'Post created',

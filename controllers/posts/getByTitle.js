@@ -9,13 +9,15 @@ const getByTitle = async (req, res) => {
         $or: [
             {
                 title: {
-                    $regex: title
+                    $regex: title,
+                    $options: 'i'
                 }
             },
             {
                 tags: {
                     $elemMatch: {
-                        $regex: title
+                        $regex: title,
+                        $options: 'i'
                     }
                 },
             }

@@ -12,7 +12,8 @@ const getUsersForAddInCollection = async (req, res) => {
     const users = await User.find({
         // find by username
         username: {
-            $regex: username
+            $regex: username,
+            $options: 'i'
         },
         // find users which not authors of this collection
         _id: {

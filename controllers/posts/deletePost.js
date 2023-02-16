@@ -20,7 +20,11 @@ const deletePost = async (req, res) => {
 
     await Post.findByIdAndDelete(postId)
 
-    res.status(204).send()
+    res.status(202).json({
+        code: 202,
+        status: 'success',
+        message: 'Post deleted',
+    })
 }
 
 module.exports = deletePost
