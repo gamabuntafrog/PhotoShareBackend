@@ -3,25 +3,30 @@ const {Post, User} = require('../../models')
 const getPostsByUserId = async (req, res) => {
     const {currentUserId} = req
     const {id} = req.params
+    const {page = 1, arrayOfId = '[]'} = req.query
+    const parsedArrayOfId = JSON.parse(arrayOfId)
 
-    // const posts = await Post.find().sort({createdAt: -1}).populate({
-    //     path: 'author'
-    // })
+    const start = (page - 1) * 15
 
     const {posts} = await User.findById(id).populate({
         path: 'posts',
         options: {
-            sort: {createdAt: -1}
+            sort: {createdAt: -1},
         },
         populate: {
             path: 'author'
-        }
+        },
     })
+
+    // const filteredPosts = posts.filter(({_id}) => !parsedArrayOfId.find((id) => id === _id.toString()))
+
+    const slicedPosts = posts.slice(start, start + 15)
+    console.log(slicedPosts)
 
     const currentUser = await User.findById(currentUserId).populate('collections')
 
     // .filter(post => post.author !== null)
-    const validatedPosts = posts.map((post) => {
+    const validatedPosts = slicedPosts.map((post) => {
         const {_id: postId, author, title, image: {url}, body, tags, savesCount, likesCount} = post
         const {_id: authorId, avatar: {url: avatarUrl}, username} = author
 
@@ -40,7 +45,19 @@ const getPostsByUserId = async (req, res) => {
 
 
         const validatedAuthor = {_id: authorId, avatar: avatarUrl, username}
-        const validatedPost = {_id: postId, author: validatedAuthor, title, image: url, body, tags, savesCount, likesCount, isLiked, isSomewhereSaved, savesInfo}
+        const validatedPost = {
+            _id: postId,
+            author: validatedAuthor,
+            title,
+            image: url,
+            body,
+            tags,
+            savesCount,
+            likesCount,
+            isLiked,
+            isSomewhereSaved,
+            savesInfo
+        }
 
         return validatedPost
     })
