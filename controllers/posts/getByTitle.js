@@ -3,9 +3,16 @@ const {Post, User} = require('../../models')
 
 const getByTitle = async (req, res) => {
     const {currentUserId} = req
-    const {title} = req.query
+    const {page = 1, arrayOfId = [], title = ''} = req.query
+    const parsedArrayOfId = JSON.parse(arrayOfId)
+
+    const limit = 15
+    const skip = limit * (page - 1)
 
     const posts = await Post.find({
+        _id: {
+            $nin: parsedArrayOfId
+        },
         $or: [
             {
                 title: {
@@ -27,7 +34,7 @@ const getByTitle = async (req, res) => {
         populate: {
             path: 'collections'
         }
-    })
+    }).limit(limit).skip(skip)
 
     const currentUser = await User.findById(currentUserId).populate('collections')
 

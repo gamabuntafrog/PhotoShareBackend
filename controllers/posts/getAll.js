@@ -6,7 +6,6 @@ const getAll = async (req, res) => {
     const parsedArrayOfId = JSON.parse(arrayOfId)
 
     const limit = 15
-    const skip = limit * (page - 1)
 
     const posts = await Post.find({
         _id: {
@@ -17,9 +16,7 @@ const getAll = async (req, res) => {
         populate: {
             path: 'collections'
         },
-    }).limit(limit).skip(skip)
-
-    // console.log(posts[0]?.createdAt)
+    }).limit(limit)
 
     const currentUser = await User.findById(currentUserId).populate('collections')
 
