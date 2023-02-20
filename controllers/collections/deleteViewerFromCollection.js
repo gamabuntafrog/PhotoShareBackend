@@ -1,5 +1,5 @@
 const Collection = require("../../models/collection");
-const {Conflict} = require('http-errors')
+const {Conflict, NotFound} = require('http-errors')
 const {User} = require("../../models");
 const findOutIsCurrentUserAdmin = require('./middlewares/findOutIsCurrentUserAdmin')
 const translate = require("../../utils/language/translate");
@@ -13,17 +13,17 @@ const deleteViewerFromCollection = async (req, res) => {
     const collection = await Collection.findById(collectionId)
 
     if (!collection) {
-        throw new NotFound('Collection does not exists')
+        throw new NotFound(t('collectionNotFound'))
     }
 
     if (!findOutIsCurrentUserAdmin(collection.authors, currentUserId)) {
-        throw new Conflict('You dont have permission')
+        throw new Conflict(t('dontHavePermission'))
     }
 
     const isViewerAlreadyExists = collection.viewers.some((userId) => userId.toString() === viewerId.toString())
 
     if (!isViewerAlreadyExists) {
-        throw new Conflict('User is not already viewer')
+        throw new Conflict('userAlreadyViewer')
     }
 
     await Collection.findByIdAndUpdate(collectionId, {
@@ -41,7 +41,7 @@ const deleteViewerFromCollection = async (req, res) => {
     res.status(201).json({
         code: 201,
         status: 'success',
-        message: 'Successfully deleted'
+        message: t('successfullyDeleted')
     })
 }
 

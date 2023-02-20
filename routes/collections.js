@@ -19,6 +19,8 @@ router.post('/:collectionId/requests', validateObjectId(), ctrlWrapper(auth), ct
 
 router.delete('/:collectionId/requests', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.unsendRequestToJoinFromCollection))
 
+router.delete('/:collectionId/requests/:userId', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.deleteRequestedUserFromCollection))
+
 router.post('/:collectionId/saves/:postId', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.savePostInCollection))
 
 router.delete('/:collectionId/saves/:postId', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.deletePostFromCollection))
