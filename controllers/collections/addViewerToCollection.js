@@ -43,6 +43,14 @@ const addViewerToCollection = async (req, res) => {
             }
         })
     }
+    const isUserAlreadyInQueue = collection.requests.some((userId) => userId.toString() === viewerId.toString())
+    if (isUserAlreadyInQueue) {
+        await Collection.findByIdAndUpdate(collectionId, {
+            $pull: {
+                requests: viewerId
+            }
+        })
+    }
 
     await Collection.findByIdAndUpdate(collectionId, {
         $push: {

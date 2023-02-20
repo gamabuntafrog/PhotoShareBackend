@@ -26,7 +26,7 @@ const addAuthorToCollection = async (req, res) => {
     const isAuthorAlreadyExists = collection.authors.some(({user: userId}) => userId.toString() === authorId.toString())
 
     if (isAuthorAlreadyExists) {
-        throw new Conflict('userAlreadyAuthor')
+        throw new Conflict(t('userAlreadyAuthor'))
     }
 
     const isAuthorAlreadyHasThisRole = collection.authors
@@ -48,6 +48,15 @@ const addAuthorToCollection = async (req, res) => {
         await User.findByIdAndUpdate(authorId, {
             $pull: {
                 allowedToViewCollections: collectionId
+            }
+        })
+    }
+
+    const isUserAlreadyInQueue = collection.requests.some((userId) => userId.toString() === authorId.toString())
+    if (isUserAlreadyInQueue) {
+        await Collection.findByIdAndUpdate(collectionId, {
+            $pull: {
+                requests: authorId
             }
         })
     }

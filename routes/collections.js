@@ -15,6 +15,10 @@ router.get('/search', ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.getCollecti
 
 router.get('/:id', validateObjectId(), (auth), ctrlWrapper(collectionsCtrl.getPopulatedCollection))
 
+router.post('/:collectionId/requests', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.sendRequestToJoinToCollection))
+
+router.delete('/:collectionId/requests', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.unsendRequestToJoinFromCollection))
+
 router.post('/:collectionId/saves/:postId', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.savePostInCollection))
 
 router.delete('/:collectionId/saves/:postId', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.deletePostFromCollection))

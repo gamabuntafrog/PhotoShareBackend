@@ -20,5 +20,6 @@ module.exports = {
     roleAdded: 'Successfully added',
     successfullyChanged: 'Successfully changed',
     successfullyDeleted: 'Successfully deleted',
-    successfullySaved: 'Successfully saved'
+    successfullySaved: 'Successfully saved',
+    requestSent: 'Successfully sent'
 }

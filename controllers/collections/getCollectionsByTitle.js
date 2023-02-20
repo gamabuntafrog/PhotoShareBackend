@@ -7,6 +7,7 @@ const getCollectionsByTitle = async (req, res) => {
     const {language = ''} = req.headers
 
     const t = translate(language)
+
     const match = {
         $or: [
             {
@@ -49,7 +50,6 @@ const getCollectionsByTitle = async (req, res) => {
 
 
         const formattedPosts = posts.map((post) => {
-            console.log(post)
             const {_id, image: {url}} = post
 
             return {

@@ -9,7 +9,7 @@ const getPopulatedCollection = async (req, res) => {
     const {language = ''} = req.headers
 
     const t = translate(language)
-    const collection = await Collection.findById(collectionId).populate('authors.user').populate('viewers').populate({
+    const collection = await Collection.findById(collectionId).populate('authors.user').populate('viewers').populate('requests').populate({
         path: 'posts',
         options: {
             sort: {createdAt: -1}
@@ -28,15 +28,13 @@ const getPopulatedCollection = async (req, res) => {
         .some(({user, roles}) => user._id.toString() === currentUserId.toString() && roles.includes('ADMIN'))
 
     const isViewer = collection.viewers.some(({_id}) => _id.toString() === currentUserId.toString())
+    const isUserAlreadyInQueue = collection.requests.some(({_id: userId}) => userId.toString() === currentUserId.toString())
 
     if (collection.isPrivate) {
         if (!isCurrentUserAuthorOfCollection && !isViewer) {
             throw new NotFound(t('collectionNotFound'))
         }
     }
-
-
-    const currentUser = await User.findById(currentUserId).populate('collections')
 
     const validatedAuthors = collection.authors.map(({user, roles}) => {
         const {_id: authorId, avatar: {url: avatarUrl}, username, subscribers} = user
@@ -47,47 +45,17 @@ const getPopulatedCollection = async (req, res) => {
         return {_id: authorId, avatar: avatarUrl, username, subscribersCount: subscribers.length, isAuthor, isAdmin}
     })
 
+    const validatedRequests = collection.requests.map((user) => {
+        const {_id: authorId, avatar: {url: avatarUrl}, username} = user
+
+        return {_id: authorId, avatar: avatarUrl, username}
+    })
+
     const validatedViewers = collection.viewers.map((viewer) => {
         const {_id: authorId, avatar: {url: avatarUrl}, username} = viewer
 
         return {_id: authorId, avatar: avatarUrl, username}
     })
-
-    const validatedPosts = collection.posts.map((post) => {
-        const isLiked = post.usersLiked.some((id) => id.toString() === currentUserId.toString())
-        const isSomewhereSaved = currentUser.collections.some(({posts}) => posts.find((id) => id.toString() === post._id.toString()))
-
-        const savesInfo = currentUser.collections.map(({title, posts, _id}) => {
-            const isPostInCollection = posts.find((id) => id.toString() === post._id.toString())
-
-            if (isPostInCollection) {
-                return {title, collectionId: _id, isSaved: true}
-            } else {
-                return {title, collectionId: _id, isSaved: false}
-            }
-        })
-
-        const {_id, author, title, image: {url}, body, tags, savesCount, likesCount} = post
-
-        const {_id: authorId, avatar: {url: avatarUrl}, username} = author
-        const validatedAuthor = {_id: authorId, avatar: avatarUrl, username}
-        const validatedPost = {
-            _id,
-            author: validatedAuthor,
-            title,
-            image: url,
-            body,
-            tags,
-            savesCount,
-            likesCount,
-            isLiked,
-            isSomewhereSaved,
-            savesInfo
-        }
-
-        return validatedPost
-    })
-
 
     res.status(200).json({
         status: 'success',
@@ -96,12 +64,14 @@ const getPopulatedCollection = async (req, res) => {
             currentUserStatus: {
                 isAuthor: isCurrentUserAuthorOfCollection,
                 isAdmin: isCurrentUserAdminOfCollection,
+                isViewer,
+                isInQueue: isUserAlreadyInQueue,
             },
             collection: {
                 ...collection.toObject(),
                 authors: validatedAuthors,
                 viewers: validatedViewers,
-                posts: validatedPosts,
+                requests: validatedRequests
             }
         }
     })

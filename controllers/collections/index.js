@@ -13,7 +13,9 @@ const addViewerToCollection = require('./addViewerToCollection')
 const deleteViewerFromCollection = require('./deleteViewerFromCollection')
 const changeCollectionInfo = require('./changeCollectionInfo')
 const getCollectionsByTitle = require('./getCollectionsByTitle')
-
+const sendRequestToJoinToCollection = require('./sendRequestToJoinToCollection')
+const unsendRequestToJoinFromCollection = require('./unsendRequestToJoinFromCollection')
+const deleteCurrentUserFromCollection = require('./deleteCurrentUserFromCollection')
 
 module.exports = {
     createCollection,
@@ -31,4 +33,7 @@ module.exports = {
     deleteViewerFromCollection,
     changeCollectionInfo,
     getCollectionsByTitle,
+    sendRequestToJoinToCollection,
+    unsendRequestToJoinFromCollection,
+    deleteCurrentUserFromCollection
 }
