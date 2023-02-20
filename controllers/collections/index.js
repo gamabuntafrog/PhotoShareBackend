@@ -15,6 +15,7 @@ const deleteViewerFromCollection = require('./deleteViewerFromCollection')
 const changeCollectionInfo = require('./changeCollectionInfo')
 const getCollectionsByTitle = require('./getCollectionsByTitle')
 
+
 module.exports = {
     createCollection,
     getCurrent,
@@ -31,5 +32,5 @@ module.exports = {
     addViewerToCollection,
     deleteViewerFromCollection,
     changeCollectionInfo,
-    getCollectionsByTitle
+    getCollectionsByTitle,
 }

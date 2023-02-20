@@ -1,6 +1,7 @@
 const {Collection, User} = require("../../models");
 const {NotFound, Conflict} = require('http-errors')
 
+
 const getPopulatedCollection = async (req, res) => {
     const {id: collectionId} = req.params
     const {currentUserId} = req

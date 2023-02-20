@@ -6,13 +6,11 @@ const router = express.Router()
 
 router.get('/', ctrlWrapper(auth), ctrlWrapper(ctrl.getAll))
 
-router.get('/my', ctrlWrapper(auth), ctrlWrapper(ctrl.getMy))
-
-router.get('/saved', ctrlWrapper(auth), ctrlWrapper(ctrl.getSaved))
-
 router.get('/authors/:username', ctrlWrapper(ctrl.findByUsername))
 
 router.get('/search', ctrlWrapper(auth), ctrlWrapper(ctrl.getByTitle))
+
+router.get('/collections/:id', ctrlWrapper(auth), validateObjectId(), ctrlWrapper(ctrl.getPostsByCollectionId))
 
 router.get('/:id', ctrlWrapper(auth), ctrlWrapper(ctrl.findOneById))
 

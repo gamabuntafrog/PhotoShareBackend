@@ -22,7 +22,7 @@ const register = async (req, res) => {
     })
 
     if (isUserExist) {
-        throw new Conflict(`user with this email or username already exists`)
+        throw new Conflict(`User with this email or username already exists`)
     }
 
     const newUser = new User(req.body)

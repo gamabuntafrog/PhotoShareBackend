@@ -1,10 +1,14 @@
 const {Post, Collection, User} = require('../../models')
 const {log} = require("debug");
 const {NotFound} = require('http-errors')
+const translate = require("../../utils/language/translate");
 
 const findOneById = async (req, res) => {
     const {currentUserId} = req
     const {id: postId} = req.params
+    const {language = ''} = req.headers
+
+    const t = translate(language)
 
     const post = await Post.findById(postId).populate({
         path: 'author',
@@ -19,7 +23,7 @@ const findOneById = async (req, res) => {
     })
 
     if (!post) {
-        throw new NotFound('Post does not exist')
+        throw new NotFound(t('postNotFound'))
     }
 
     const currentUser = await User.findById(currentUserId).populate('collections')

@@ -1,10 +1,14 @@
 const {Post, Collection, User} = require('../../models')
 const cloudinary = require("../../utils/cloudinary");
+const translate = require("../../utils/language/translate");
 
 
 const createPost = async (req, res) => {
     const {currentUserId} = req
     const {image: imageFile, collectionId} = req.body
+    const {language = ''} = req.headers
+
+    const t = translate(language)
 
     const result = await cloudinary.uploader.upload(imageFile, {
         folder: 'photos',
@@ -30,16 +34,13 @@ const createPost = async (req, res) => {
         $push: {
             posts: post._id,
             savedPosts: {post: post._id, collection: collectionId},
-            // collections:
-
         }
     })
-
 
     res.status(201).json({
         code: 201,
         status: 'success',
-        message: 'Post created',
+        message: t('postCreated'),
         data: {
             post
         }
