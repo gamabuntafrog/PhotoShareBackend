@@ -1,29 +1,32 @@
 const Collection = require("../../models/collection");
-const {Conflict} = require('http-errors')
+const {Conflict, NotFound} = require('http-errors')
 const {User} = require("../../models");
 const findOutIsCurrentUserAdmin = require('./middlewares/findOutIsCurrentUserAdmin')
+const translate = require("../../utils/language/translate");
 
 
 const addAuthorToCollection = async (req, res) => {
     const {collectionId, authorId} = req.params
     const {role = 'AUTHOR'} = req.query
     const {currentUserId} = req
+    const {language = ''} = req.headers
 
+    const t = translate(language)
 
     const collection = await Collection.findById(collectionId)
 
     if (!collection) {
-        throw new NotFound('Collection does not exists')
+        throw new NotFound(t('collectionNotFound'))
     }
 
     if (!findOutIsCurrentUserAdmin(collection.authors, currentUserId)) {
-        throw new Conflict('You dont have permission')
+        throw new Conflict(t('dontHavePermission'))
     }
 
     const isAuthorAlreadyExists = collection.authors.some(({user: userId}) => userId.toString() === authorId.toString())
 
     if (isAuthorAlreadyExists) {
-        throw new Conflict('User already author')
+        throw new Conflict('userAlreadyAuthor')
     }
 
     const isAuthorAlreadyHasThisRole = collection.authors
@@ -31,7 +34,7 @@ const addAuthorToCollection = async (req, res) => {
             userId.toString() === authorId.toString() && roles.includes(role))
 
     if (isAuthorAlreadyHasThisRole) {
-        throw new Conflict('Author already has this role')
+        throw new Conflict(t('userAlreadyHasRole'))
     }
 
     const isUserViewer = collection.viewers.some((userId) => userId.toString() === authorId.toString())
@@ -67,7 +70,7 @@ const addAuthorToCollection = async (req, res) => {
     res.status(201).json({
         code: 201,
         status: 'success',
-        message: 'Successfully added'
+        message: t('roleAdded')
     })
 }
 

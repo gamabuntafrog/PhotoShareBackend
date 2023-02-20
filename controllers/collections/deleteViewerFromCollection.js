@@ -2,11 +2,14 @@ const Collection = require("../../models/collection");
 const {Conflict} = require('http-errors')
 const {User} = require("../../models");
 const findOutIsCurrentUserAdmin = require('./middlewares/findOutIsCurrentUserAdmin')
+const translate = require("../../utils/language/translate");
 
 const deleteViewerFromCollection = async (req, res) => {
     const {collectionId, viewerId} = req.params
     const {currentUserId} = req
+    const {language = ''} = req.headers
 
+    const t = translate(language)
     const collection = await Collection.findById(collectionId)
 
     if (!collection) {

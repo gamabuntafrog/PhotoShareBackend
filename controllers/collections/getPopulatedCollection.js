@@ -1,11 +1,14 @@
 const {Collection, User} = require("../../models");
 const {NotFound, Conflict} = require('http-errors')
+const translate = require("../../utils/language/translate");
 
 
 const getPopulatedCollection = async (req, res) => {
     const {id: collectionId} = req.params
     const {currentUserId} = req
+    const {language = ''} = req.headers
 
+    const t = translate(language)
     const collection = await Collection.findById(collectionId).populate('authors.user').populate('viewers').populate({
         path: 'posts',
         options: {
@@ -15,7 +18,7 @@ const getPopulatedCollection = async (req, res) => {
     })
 
     if (!collection) {
-        throw new NotFound('Collection does not exist')
+        throw new NotFound(t('collectionNotFound'))
     }
 
     const isCurrentUserAuthorOfCollection = collection.authors
@@ -28,7 +31,7 @@ const getPopulatedCollection = async (req, res) => {
 
     if (collection.isPrivate) {
         if (!isCurrentUserAuthorOfCollection && !isViewer) {
-            throw new NotFound('Collection does not exist')
+            throw new NotFound(t('collectionNotFound'))
         }
     }
 

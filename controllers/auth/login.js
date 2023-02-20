@@ -1,16 +1,19 @@
 const {BadRequest} = require('http-errors')
 const jwt = require("jsonwebtoken")
 const {User} = require('../../models')
+const translate = require("../../utils/language/translate");
 
 const login = async (req, res) => {
     const {SECRET_KEY} = process.env
 
     const {email, password} = req.body
     const user = await User.findOne({email})
-    // throw new BadRequest("Email or password is wrong")
+    const {language = ''} = req.headers
+
+    const t = translate(language)
 
     if (!user || !user.comparePassword(password)) {
-        throw new BadRequest("Email or password is wrong")
+        throw new BadRequest(t('emailOrPasswordWrong'))
     }
 
     const payload = {

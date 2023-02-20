@@ -3,12 +3,15 @@ const bcrypt = require('bcryptjs')
 const Joi = require('joi')
 const {Conflict} = require('http-errors')
 const jwt = require("jsonwebtoken");
+const translate = require("../../utils/language/translate");
 
 
 
 const register = async (req, res) => {
-
     const {password, username, email} = req.body
+    const {language = ''} = req.headers
+
+    const t = translate(language)
 
     const isUserExist = await User.findOne({
         $or: [
@@ -22,7 +25,7 @@ const register = async (req, res) => {
     })
 
     if (isUserExist) {
-        throw new Conflict(`User with this email or username already exists`)
+        throw new Conflict(t('userExistsError'))
     }
 
     const newUser = new User(req.body)

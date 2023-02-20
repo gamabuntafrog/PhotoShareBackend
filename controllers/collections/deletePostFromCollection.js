@@ -1,10 +1,13 @@
 const {Conflict, NotFound} = require("http-errors");
 const {Post, User, Collection} = require("../../models");
+const translate = require("../../utils/language/translate");
 
 const deletePostFromCollection = async (req, res) => {
     const {postId, collectionId} = req.params
     const {_id: currentUserId} = req.user
+    const {language = ''} = req.headers
 
+    const t = translate(language)
     const post = await Post.findById(postId)
     if (!post) {
         throw new NotFound('Post no exists')

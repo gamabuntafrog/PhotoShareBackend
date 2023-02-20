@@ -1,9 +1,12 @@
 const {Collection} = require("../../models");
+const translate = require("../../utils/language/translate");
 
 const getCollectionsByTitle = async (req, res) => {
     const {currentUserId} = req
     const {title} = req.query
+    const {language = ''} = req.headers
 
+    const t = translate(language)
     const match = {
         $or: [
             {

@@ -1,9 +1,12 @@
 const {Collection, User} = require("../../models");
+const translate = require("../../utils/language/translate");
 
 
 const createCollection = async (req, res) => {
     const {currentUserId} = req
+    const {language = ''} = req.headers
 
+    const t = translate(language)
     const collection = await Collection.create({authors: [{user: currentUserId, roles: ['ADMIN']}], ...req.body})
 
     await User.findByIdAndUpdate(currentUserId, {
@@ -15,7 +18,7 @@ const createCollection = async (req, res) => {
     res.status(201).json({
         status: 'success',
         code: 201,
-        message: 'Collection created',
+        message: t('collectionCreated'),
         data: {
             collection
         }

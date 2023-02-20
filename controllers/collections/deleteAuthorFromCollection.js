@@ -2,25 +2,28 @@ const Collection = require("../../models/collection");
 const {Conflict} = require('http-errors')
 const {User} = require("../../models");
 const findOutIsCurrentUserAdmin = require('./middlewares/findOutIsCurrentUserAdmin')
+const translate = require("../../utils/language/translate");
 
 const addAuthorToCollection = async (req, res) => {
     const {collectionId, authorId} = req.params
     const {currentUserId, currentUser} = req
+    const {language = ''} = req.headers
 
+    const t = translate(language)
     const collection = await Collection.findById(collectionId)
 
     if (!collection) {
-        throw new NotFound('Collection does not exists')
+        throw new NotFound(t('collectionNotFound'))
     }
 
     if (!findOutIsCurrentUserAdmin(collection.authors, currentUserId)) {
-        throw new Conflict('You dont have permission')
+        throw new Conflict(t('dontHavePermission'))
     }
 
     const isAuthorAlreadyExists = collection.authors.some(({user: userId}) => userId.toString() === authorId.toString())
 
     if (!isAuthorAlreadyExists) {
-        throw new Conflict('User already not author')
+        throw new Conflict(t('userAlreadyNotAuthor'))
     }
 
     await Collection.findByIdAndUpdate(collectionId, {

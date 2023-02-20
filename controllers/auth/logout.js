@@ -2,9 +2,9 @@ const {User} = require("../../models");
 
 
 const logout = async (req, res) => {
-    const {_id} = req.user
+    const {currentUserId} = req
 
-    await User.findByIdAndUpdate(_id, {
+    await User.findByIdAndUpdate(currentUserId, {
         token: null
     })
 

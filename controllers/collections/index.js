@@ -6,7 +6,6 @@ const deletePostFromCollection = require('./deletePostFromCollection')
 const deleteCollection = require('./deleteCollection')
 const addAuthorToCollection = require('./addAuthorToCollection')
 const deleteAuthorFromCollection = require('./deleteAuthorFromCollection')
-const deleteCurrentUserFromCollection = require('./deleteCurrentUserFromCollection')
 const getCollections = require('./getCollections')
 const changeIsPrivate = require('./changeIsPrivate')
 const changeAuthorRole = require('./changeAuthorRole')
@@ -25,7 +24,6 @@ module.exports = {
     deleteCollection,
     addAuthorToCollection,
     deleteAuthorFromCollection,
-    deleteCurrentUserFromCollection,
     getCollections,
     changeIsPrivate,
     changeAuthorRole,
