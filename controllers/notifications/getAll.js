@@ -5,7 +5,8 @@ const notificationTypes = require("../../utils/notificationTypes");
 const getAll = async (req, res) => {
     const {currentUserId} = req
 
-    const notifications = await Notification.find({receiver: currentUserId})
+
+    const notifications = await Notification.find({receiver: currentUserId}).sort({createdAt: -1})
         .populate('userRef',).populate('postRef').populate('collectionRef')
 
     const validatedNotifications = notifications.map((notification) => {

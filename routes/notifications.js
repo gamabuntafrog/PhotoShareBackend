@@ -5,7 +5,7 @@ const {ctrlWrapper, auth, validateObjectId, validate} = require('../middlewares'
 
 router.get('/', ctrlWrapper(auth), ctrlWrapper(ctrl.getAll))
 
-router.patch('/', ctrlWrapper(auth), ctrlWrapper(ctrl.getAll))
+router.patch('/', ctrlWrapper(auth), ctrlWrapper(ctrl.clearNotifications))
 
 
 module.exports = router
