@@ -3,9 +3,7 @@ const validateRole = (schema) => {
         const {error} = schema.validate(req.query)
 
         if (error) {
-            console.log(error.details)
-
-            const err = {message: 'Invalid role', statusCode: 400, status: 'error'}
+            const err = {message: t('roleError'), statusCode: 400, status: 'error'}
 
             next(err)
             return

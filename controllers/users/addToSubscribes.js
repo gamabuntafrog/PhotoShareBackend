@@ -1,21 +1,24 @@
 const {User, Notification} = require('../../models')
 const {NotFound, Conflict} = require('http-errors')
-const emitter = require("../../emitter");
-
+const translate = require("../../utils/language/translate");
+const notificationTypes = require('../../utils/notificationTypes')
 
 
 const addToSubscribes = async (req, res) => {
     const {id: userId} = req.params
     const {_id: currentUserId} = req.user
+    const {language = ''} = req.headers
+
+    const t = translate(language)
 
     const userIfHeExists = await User.findById(userId)
     if (!userIfHeExists) {
-        throw new NotFound('user no exists')
+        throw new NotFound(t('userDoesNotExist'))
     }
 
     const userIfHeIsAlreadyInSubscribes = req.user.subscribes.find(({_id}) => _id.toString() === userId) || null
     if (userIfHeIsAlreadyInSubscribes) {
-        throw new Conflict('user already in subscribes')
+        throw new Conflict(t('userAlreadyInSubscribers'))
     }
 
     const subscriber = await User.findByIdAndUpdate(currentUserId, {
@@ -30,23 +33,13 @@ const addToSubscribes = async (req, res) => {
         }
     })
 
-    const notification = {
-        type: 'subscribe',
-        user: currentUserId,
-        receiver: userId
-    }
-
-    const newNotification = await Notification.create(notification)
-
-    emitter.emit(`newNotification/${userId}`, newNotification)
-
-    res.status(201).json({
-        code: 201,
-        status: 'success',
-        data: {
-            user: userIfHeExists
-        }
+    await Notification.create({
+        userRef: currentUserId,
+        receiver: userId,
+        type: notificationTypes.subscribe
     })
+
+    res.status(204).send()
 }
 
 module.exports = addToSubscribes

@@ -13,6 +13,8 @@ router.get('/current', ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.getCurrent
 
 router.get('/search', ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.getCollectionsByTitle))
 
+router.get('/users/:id', ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.getCollectionsByUserId))
+
 router.get('/:id', validateObjectId(), (auth), ctrlWrapper(collectionsCtrl.getPopulatedCollection))
 
 router.post('/:collectionId/requests', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(collectionsCtrl.sendRequestToJoinToCollection))

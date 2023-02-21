@@ -1,15 +1,19 @@
 const {User} = require("../../models");
 const {NotFound} = require("http-errors");
+const translate = require("../../utils/language/translate");
 
 
 const getById = async (req, res) => {
     const {currentUserId} = req
     const {id} = req.params
+    const {language = ''} = req.headers
+
+    const t = translate(language)
 
     const user = await User.findById(id)
 
     if (!user) {
-        throw new NotFound('Not found')
+        throw new NotFound(t('notFound'))
     }
 
     const {

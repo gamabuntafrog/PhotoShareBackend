@@ -1,9 +1,11 @@
 const {User} = require('../../models')
+const translate = require("../../utils/language/translate");
 
 const getPostsByUserId = async (req, res) => {
     const {currentUserId} = req
     const {id} = req.params
     const {arrayOfId = '[]'} = req.query
+
 
     const parsedArrayOfId = JSON.parse(arrayOfId)
 

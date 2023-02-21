@@ -5,11 +5,8 @@ const {ctrlWrapper, auth, validateObjectId, validate} = require('../middlewares'
 const {updateUserValidationSchema} = require("../shemas/user");
 
 
-router.get('/:id/collections', ctrlWrapper(auth), ctrlWrapper(ctrl.getCollectionsByUserId))
 
 router.get('/:id/allowedToViewCollections', ctrlWrapper(auth), ctrlWrapper(ctrl.getAllowedToViewCollections))
-
-router.get('/:id/posts', ctrlWrapper(auth), ctrlWrapper(ctrl.getPostsByUserId))
 
 router.get('/search', ctrlWrapper(ctrl.getUsersByUsername));
 
@@ -21,9 +18,6 @@ router.get('/current', ctrlWrapper(auth), ctrlWrapper(ctrl.getCurrent))
 
 router.patch('/current', ctrlWrapper(auth), validate(updateUserValidationSchema), ctrlWrapper(ctrl.updateCurrent))
 
-router.get('/notifications', ctrlWrapper(auth), ctrlWrapper(notificationsCtrl.getOne))
-
-router.get('/notifications/all', ctrlWrapper(auth), ctrlWrapper(notificationsCtrl.getAll))
 
 router.get('/:id', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(ctrl.getById))
 

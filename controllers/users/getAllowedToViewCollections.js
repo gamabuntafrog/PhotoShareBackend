@@ -1,12 +1,16 @@
 const {User} = require("../../models");
 const {Unathorized} = require('http-errors')
+const translate = require("../../utils/language/translate");
 
 const getAllowedToViewCollections = async (req, res) => {
     const {id} = req.params
     const {currentUserId} = req
+    const {language = ''} = req.headers
+
+    const t = translate(language)
 
     if (currentUserId.toString() !== id.toString()) {
-        throw new Unathorized('You don\'t have permission')
+        throw new Unathorized(t('dontHavePermission'))
     }
 
     const {allowedToViewCollections} = await User.findById(id).populate({

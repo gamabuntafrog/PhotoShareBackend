@@ -2,6 +2,7 @@
 const cloudinary = require('../../utils/cloudinary')
 const {User} = require('../../models')
 const {log} = require("debug");
+const translate = require("../../utils/language/translate");
 
 
 
@@ -9,6 +10,9 @@ const updateCurrent = async (req, res) => {
     const {currentUser, currentUserId} = req
     const {id: publicAvatarId} = currentUser.avatar
     const {avatar: avatarFile} = req.body
+    const {language = ''} = req.headers
+
+    const t = translate(language)
 
     if (avatarFile) {
         if (publicAvatarId) {
@@ -35,7 +39,7 @@ const updateCurrent = async (req, res) => {
     res.status(201).json({
         code: 201,
         status: 'success',
-        message: 'Profile updated',
+        message: t('profileUpdated'),
         data: {
             user: updatedUser
         }

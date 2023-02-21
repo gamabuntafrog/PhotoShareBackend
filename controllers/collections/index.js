@@ -17,6 +17,7 @@ const sendRequestToJoinToCollection = require('./sendRequestToJoinToCollection')
 const unsendRequestToJoinFromCollection = require('./unsendRequestToJoinFromCollection')
 const deleteCurrentUserFromCollection = require('./deleteCurrentUserFromCollection')
 const deleteRequestedUserFromCollection = require('./deleteRequestedUserFromCollection')
+const getCollectionsByUserId = require('./getCollectionsByUserId')
 
 module.exports = {
     createCollection,
@@ -37,5 +38,6 @@ module.exports = {
     sendRequestToJoinToCollection,
     unsendRequestToJoinFromCollection,
     deleteCurrentUserFromCollection,
-    deleteRequestedUserFromCollection
+    deleteRequestedUserFromCollection,
+    getCollectionsByUserId
 }

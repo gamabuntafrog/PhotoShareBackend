@@ -7,7 +7,6 @@ const getSubscribes = async (req, res) => {
         path: 'subscribes'
     })
 
-    //
     res.status(200).send({
         code: 200,
         status: 'success',

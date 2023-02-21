@@ -1,9 +1,13 @@
 const {User} = require("../../models");
+const translate = require("../../utils/language/translate");
 
 
 const getCollectionsByUserId = async (req, res) => {
     const {id} = req.params
     const {currentUserId} = req
+    const {language = ''} = req.headers
+
+    const t = translate(language)
 
     const {collections} = await User.findById(id).populate({
         path: 'collections',

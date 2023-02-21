@@ -16,9 +16,18 @@ module.exports = {
     userAlreadyViewer: 'Користувач вже глядач',
     userAlreadyHasRole: 'Користувач вже має цю роль',
     userAlreadyNotAuthor: 'Користувач все ще не автор',
+    userDoesNotExist: 'Користувач не існує',
     roleAdded: 'Роль успішно змінена',
     successfullyChanged: 'Успішно змінено',
     successfullyDeleted: 'Успішно видалено',
     successfullySaved: 'Успішно збережено',
-    requestSent: 'Успішно відправлено'
+    requestSent: 'Успішно відправлено',
+    profileUpdated: 'Профіль оновлено',
+    userAlreadyInSubscribers: 'Користувач вже в піпдисках',
+    userAlreadyNotInSubscribers: 'Користувач ще не в підписках',
+    authError: 'Помилка авторизації',
+    invalidSignature: 'Помилка авторизації',
+    validationError: 'Помилка обробки даних',
+    roleError: 'Помилка в обробці ролей',
+    serverError: 'Помилка серверу'
 }

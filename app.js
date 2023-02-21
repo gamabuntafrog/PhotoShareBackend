@@ -10,6 +10,7 @@ const postsRouter = require('./routes/posts')
 const authRouter = require('./routes/auth')
 const commentsRouter = require('./routes/comments')
 const collectionsRouter = require('./routes/collections')
+const notificationsRouter = require('./routes/notifications')
 
 const dotenv = require('dotenv')
 dotenv.config()
@@ -28,6 +29,7 @@ mongoose.connect(DB_HOST).then(() => {
 })
 
 const cors = require('cors')
+const translate = require("./utils/language/translate");
 
 app.use(logger('dev'));
 app.use(cors())
@@ -42,7 +44,8 @@ app.use('/collections', collectionsRouter)
 app.use('/posts', postsRouter)
 app.use('/auth', authRouter)
 app.use('/comments', commentsRouter)
-
+app.use('/comments', commentsRouter)
+app.use('/notifications', notificationsRouter)
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
@@ -51,11 +54,15 @@ app.use((req, res, next) => {
 
 // error handler
 app.use((err, req, res, next) => {
-    const {statusCode = 500, statusMessage = 'error', message = 'Server error'} = err
+    const {language = ''} = req.headers
+
+    const t = translate(language)
+
+    const {statusCode = 500, statusMessage = 'error', message = t('serverError')} = err
     console.log(err, 'error handler')
 
     res.status(statusCode).json({
-        message: statusCode === 500 ? 'Server error' : message,
+        message: statusCode === 500 ? t('serverError') : message,
         code: statusCode,
         status: statusMessage
     })

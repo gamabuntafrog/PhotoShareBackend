@@ -1,10 +1,12 @@
 const {Schema, model} = require('mongoose')
 
 
+// type = subscribe/unsub, like/unlike, sendRequestToJoinToCollection/unsend
+
 const notificationSchema = Schema(
     {
         type: {
-            type: String,
+            type: Schema.Types.String,
             required: true
         },
         receiver: {
@@ -12,18 +14,25 @@ const notificationSchema = Schema(
             ref: 'user',
             required: true
         },
-        user: {
+        userRef: {
             type: Schema.Types.ObjectId,
             ref: 'user',
             required: true
         },
-        postId: {
+        postRef: {
             type: Schema.Types.ObjectId,
             ref: 'post',
-            required: false
+            required: false,
+            default: null
+        },
+        collectionRef: {
+            type: Schema.Types.ObjectId,
+            ref: 'collection',
+            required: false,
+            default: null
         },
         checked: {
-            type: Boolean,
+            type: Schema.Types.Boolean,
             required: false,
             default: false
         }

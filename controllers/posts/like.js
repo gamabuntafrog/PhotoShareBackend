@@ -1,11 +1,12 @@
-const {Post, User} = require("../../models");
+const {Post, User, Notification} = require("../../models");
 const {Conflict} = require("http-errors");
 const translate = require("../../utils/language/translate");
+const notificationTypes = require("../../utils/notificationTypes");
 
 
 const like = async (req, res) => {
     const {id: postId} = req.params
-    const {_id: userId} = req.user
+    const {currentUserId} = req
     const {language = ''} = req.headers
 
     const t = translate(language)
@@ -13,7 +14,7 @@ const like = async (req, res) => {
     const post = await Post.findById(postId)
 
     if (!post) {
-        throw new Conflict('postNotFound')
+        throw new Conflict(t('postNotFound'))
     }
 
     const postIfItAlreadyExistsInUser = req.user.likedPosts.find(({_id}) => _id.toString() === postId)
@@ -27,17 +28,23 @@ const like = async (req, res) => {
             likesCount: 1
         },
         $push: {
-            usersLiked: userId
+            usersLiked: currentUserId
         },
         new: true
     })
 
-    const addPostInUserLiked = await User.findByIdAndUpdate(userId, {
+    const addPostInUserLiked = await User.findByIdAndUpdate(currentUserId, {
         $push: {
             likedPosts: postId
         }
     })
 
+    await Notification.create({
+        userRef: currentUserId,
+        receiver: post.author,
+        type: notificationTypes.likePost,
+        postRef: postId
+    })
 
     res.status(200).json({
         code: 200,

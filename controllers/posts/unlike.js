@@ -1,10 +1,11 @@
 const {Conflict} = require("http-errors");
-const {Post, User} = require("../../models");
+const {Post, User, Notification} = require("../../models");
 const translate = require("../../utils/language/translate");
+const notificationTypes = require("../../utils/notificationTypes");
 
 const unlike = async (req, res) => {
     const {id: postId} = req.params
-    const {_id: userId} = req.user
+    const {currentUserId} = req
     const {language = ''} = req.headers
 
     const t = translate(language)
@@ -25,17 +26,23 @@ const unlike = async (req, res) => {
             likesCount: -1
         },
         $pull: {
-            usersLiked: userId
+            usersLiked: currentUserId
         },
         new: true
     })
 
-    const removePostFromUserLiked = await User.findByIdAndUpdate(userId, {
+    const removePostFromUserLiked = await User.findByIdAndUpdate(currentUserId, {
         $pull: {
             likedPosts: postId
         }
     })
 
+    await Notification.create({
+        userRef: currentUserId,
+        receiver: post.author,
+        type: notificationTypes.unlikePost,
+        postRef: postId
+    })
 
     res.status(200).json({
         code: 200,

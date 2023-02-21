@@ -17,9 +17,18 @@ module.exports = {
     userAlreadyViewer: 'User is already viewer',
     userAlreadyHasRole: 'Author already has this role',
     userAlreadyNotAuthor: 'User already not author',
+    userDoesNotExist: 'User does not exist',
     roleAdded: 'Successfully added',
     successfullyChanged: 'Successfully changed',
     successfullyDeleted: 'Successfully deleted',
     successfullySaved: 'Successfully saved',
-    requestSent: 'Successfully sent'
+    requestSent: 'Successfully sent',
+    profileUpdated: 'Profile updated',
+    userAlreadyInSubscribers: 'user already in subscribes',
+    userAlreadyNotInSubscribers: 'user already not in subscribes',
+    authError: 'Not authorized',
+    invalidSignature: "Invalid signature",
+    validationError: 'Validation error',
+    roleError: 'Invalid role',
+    serverError: 'Server error'
 }
