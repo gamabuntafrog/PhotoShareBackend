@@ -37,13 +37,16 @@ const savePostInCollection = async (req, res) => {
             savesCount: 1
         }
     })
+    const isUserAuthorOfCollection = collection.authors.some(({user: userId}) => userId.toString() === currentUserId.toString())
+    if (!isUserAuthorOfCollection) {
+        await Notification.create({
+            userRef: currentUserId,
+            receiver: post.author,
+            type: notificationTypes.savePost,
+            collectionRef: collectionId
+        })
+    }
 
-    await Notification.create({
-        userRef: currentUserId,
-        receiver: post.author,
-        type: notificationTypes.savePost,
-        postRef: postId
-    })
 
     res.status(201).json({
         status: 'success',
