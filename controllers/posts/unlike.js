@@ -37,19 +37,18 @@ const unlike = async (req, res) => {
         }
     })
 
-    await Notification.create({
-        userRef: currentUserId,
-        receiver: post.author,
-        type: notificationTypes.unlikePost,
-        postRef: postId
-    })
+    if (currentUserId.toString() !== post.author.toString()) {
+        await Notification.create({
+            userRef: currentUserId,
+            receiver: post.author,
+            type: notificationTypes.unlikePost,
+            postRef: postId
+        })
+    }
 
-    res.status(200).json({
-        code: 200,
+    res.status(201).json({
+        code: 201,
         status: 'success',
-        data: {
-            post: updatedPost
-        }
     })
 }
 

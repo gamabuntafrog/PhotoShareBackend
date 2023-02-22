@@ -1,8 +1,9 @@
 const Collection = require("../../models/collection");
 const {Conflict, NotFound} = require('http-errors')
-const {User} = require("../../models");
+const {User, Notification} = require("../../models");
 const findOutIsCurrentUserAdmin = require('./middlewares/findOutIsCurrentUserAdmin')
 const translate = require("../../utils/language/translate");
+const notificationTypes = require("../../utils/notificationTypes");
 
 const addViewerToCollection = async (req, res) => {
     const {collectionId, viewerId} = req.params
@@ -42,13 +43,27 @@ const addViewerToCollection = async (req, res) => {
                 collections: collectionId
             }
         })
+
+        await Notification.create({
+            userRef: currentUserId,
+            receiver: viewerId,
+            type: notificationTypes.changeUserRoleInCollection,
+            collectionRef: collectionId
+        })
     }
+
     const isUserAlreadyInQueue = collection.requests.some((userId) => userId.toString() === viewerId.toString())
     if (isUserAlreadyInQueue) {
         await Collection.findByIdAndUpdate(collectionId, {
             $pull: {
                 requests: viewerId
             }
+        })
+        await Notification.create({
+            userRef: currentUserId,
+            receiver: viewerId,
+            type: notificationTypes.acceptJoinToCollectionRequest,
+            collectionRef: collectionId
         })
     }
 
@@ -63,6 +78,15 @@ const addViewerToCollection = async (req, res) => {
             allowedToViewCollections: collectionId
         }
     })
+
+    if (!isViewerAlreadyExists && !isViewerAlreadyAuthor && !isUserAlreadyInQueue) {
+        await Notification.create({
+            userRef: currentUserId,
+            receiver: viewerId,
+            type: notificationTypes.addUserToCollection,
+            collectionRef: collectionId
+        })
+    }
 
     res.status(201).json({
         code: 201,

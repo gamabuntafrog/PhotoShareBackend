@@ -1,8 +1,9 @@
 const Collection = require("../../models/collection");
 const {Conflict, NotFound} = require('http-errors')
-const {User} = require("../../models");
+const {User, Notification} = require("../../models");
 const findOutIsCurrentUserAdmin = require('./middlewares/findOutIsCurrentUserAdmin')
 const translate = require("../../utils/language/translate");
+const notificationTypes = require("../../utils/notificationTypes");
 
 const changeUserRole = async (req, res) => {
     const {collectionId, authorId} = req.params
@@ -42,6 +43,13 @@ const changeUserRole = async (req, res) => {
         $set: {
             [`authors.${index}.roles`]: [role]
         }
+    })
+
+    await Notification.create({
+        userRef: currentUserId,
+        receiver: authorId,
+        type: notificationTypes.changeUserRoleInCollection,
+        collectionRef: collectionId
     })
 
     res.status(201).json({

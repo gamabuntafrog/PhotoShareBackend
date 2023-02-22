@@ -19,7 +19,7 @@ const getAll = async (req, res) => {
             return {checked, type, user}
         }
 
-        if (type === notificationTypes.likePost || type === notificationTypes.unlikePost) {
+        if (type === notificationTypes.likePost || type === notificationTypes.unlikePost || type === notificationTypes.savePost) {
 
             const post = postRef ?
                 typeof postRef === 'string' ? {_id: postRef} : {
@@ -30,7 +30,24 @@ const getAll = async (req, res) => {
             return {checked, type, user, post}
         }
 
-        return notification
+        if (
+            type === notificationTypes.addUserToCollection ||
+            type === notificationTypes.deleteUserFromCollection ||
+            type === notificationTypes.changeUserRoleInCollection ||
+            type === notificationTypes.acceptJoinToCollectionRequest ||
+            type === notificationTypes.declineJoinToCollectionRequest
+        ) {
+
+            const collection = collectionRef ?
+                typeof collectionRef === 'string' ? {_id: collectionRef} : {
+                    _id: collectionRef._id,
+                    title: collectionRef.title
+                } : null
+
+            return {checked, type, user, collection}
+        }
+
+        return {checked, type, user}
     })
 
     res.status(200).json({

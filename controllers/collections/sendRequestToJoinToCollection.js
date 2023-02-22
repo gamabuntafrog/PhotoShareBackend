@@ -1,6 +1,7 @@
-const {Collection} = require("../../models");
+const {Collection, Notification} = require("../../models");
 const {Conflict} = require("http-errors");
 const translate = require("../../utils/language/translate");
+const notificationTypes = require("../../utils/notificationTypes");
 
 
 const sendRequestToJoinToCollection = async (req, res) => {
@@ -25,6 +26,7 @@ const sendRequestToJoinToCollection = async (req, res) => {
             requests: currentUserId
         }
     })
+
 
     res.status(201).json({
         code: 201,

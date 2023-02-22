@@ -1,8 +1,9 @@
 const Collection = require("../../models/collection");
 const {Conflict, NotFound} = require('http-errors')
-const {User} = require("../../models");
+const {User, Notification} = require("../../models");
 const findOutIsCurrentUserAdmin = require('./middlewares/findOutIsCurrentUserAdmin')
 const translate = require("../../utils/language/translate");
+const notificationTypes = require("../../utils/notificationTypes");
 
 
 const addAuthorToCollection = async (req, res) => {
@@ -38,6 +39,7 @@ const addAuthorToCollection = async (req, res) => {
     }
 
     const isUserViewer = collection.viewers.some((userId) => userId.toString() === authorId.toString())
+    const isUserAlreadyInQueue = collection.requests.some((userId) => userId.toString() === authorId.toString())
 
     if (isUserViewer) {
         await Collection.findByIdAndUpdate(collectionId, {
@@ -50,16 +52,40 @@ const addAuthorToCollection = async (req, res) => {
                 allowedToViewCollections: collectionId
             }
         })
+
+        await Notification.create({
+            userRef: currentUserId,
+            receiver: authorId,
+            type: notificationTypes.changeUserRoleInCollection,
+            collectionRef: collectionId
+        })
     }
 
-    const isUserAlreadyInQueue = collection.requests.some((userId) => userId.toString() === authorId.toString())
     if (isUserAlreadyInQueue) {
         await Collection.findByIdAndUpdate(collectionId, {
             $pull: {
                 requests: authorId
             }
         })
+
+        await Notification.create({
+            userRef: currentUserId,
+            receiver: authorId,
+            type: notificationTypes.acceptJoinToCollectionRequest,
+            collectionRef: collectionId
+        })
     }
+
+    if (!isUserViewer && !isUserAlreadyInQueue) {
+        await Notification.create({
+            userRef: currentUserId,
+            receiver: authorId,
+            type: notificationTypes.addUserToCollection,
+            collectionRef: collectionId
+        })
+    }
+
+    // if (!isUserViewer && i)
 
     await Collection.findByIdAndUpdate(collectionId, {
         $push: {

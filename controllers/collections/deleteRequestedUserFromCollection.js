@@ -1,8 +1,9 @@
 const Collection = require("../../models/collection");
 const {Conflict, NotFound} = require('http-errors')
-const {User} = require("../../models");
+const {User, Notification} = require("../../models");
 const findOutIsCurrentUserAdmin = require('./middlewares/findOutIsCurrentUserAdmin')
 const translate = require("../../utils/language/translate");
+const notificationTypes = require("../../utils/notificationTypes");
 
 const deleteRequestedUserFromCollection = async (req, res) => {
     const {collectionId, userId} = req.params
@@ -30,6 +31,13 @@ const deleteRequestedUserFromCollection = async (req, res) => {
         $pull: {
             requests: userId
         }
+    })
+
+    await Notification.create({
+        userRef: currentUserId,
+        receiver: userId,
+        type: notificationTypes.declineJoinToCollectionRequest,
+        collectionRef: collectionId
     })
 
     res.status(201).json({

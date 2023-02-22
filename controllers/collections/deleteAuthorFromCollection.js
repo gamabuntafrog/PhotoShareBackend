@@ -1,12 +1,13 @@
 const Collection = require("../../models/collection");
-const {Conflict} = require('http-errors')
-const {User} = require("../../models");
+const {Conflict, NotFound} = require('http-errors')
+const {User, Notification} = require("../../models");
 const findOutIsCurrentUserAdmin = require('./middlewares/findOutIsCurrentUserAdmin')
 const translate = require("../../utils/language/translate");
+const notificationTypes = require("../../utils/notificationTypes");
 
-const addAuthorToCollection = async (req, res) => {
+const deleteAuthorFromCollection = async (req, res) => {
     const {collectionId, authorId} = req.params
-    const {currentUserId, currentUser} = req
+    const {currentUserId} = req
     const {language = ''} = req.headers
 
     const t = translate(language)
@@ -40,11 +41,18 @@ const addAuthorToCollection = async (req, res) => {
         }
     })
 
+    await Notification.create({
+        userRef: currentUserId,
+        receiver: authorId,
+        type: notificationTypes.deleteUserFromCollection,
+        collectionRef: collectionId
+    })
+
     res.status(201).json({
         code: 201,
         status: 'success',
-        message: 'Successfully deleted'
+        message: t('successfullyDeleted')
     })
 }
 
-module.exports = addAuthorToCollection
+module.exports = deleteAuthorFromCollection

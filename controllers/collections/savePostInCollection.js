@@ -1,11 +1,13 @@
-const {Post, User, Collection} = require("../../models");
+const {Post, User, Collection, Notification} = require("../../models");
 const {Conflict, NotFound} = require("http-errors");
 const translate = require("../../utils/language/translate");
+const notificationTypes = require("../../utils/notificationTypes");
 
 
 const savePostInCollection = async (req, res) => {
     const {postId, collectionId} = req.params
     const {language = ''} = req.headers
+    const {currentUserId} = req
 
     const t = translate(language)
 
@@ -34,6 +36,13 @@ const savePostInCollection = async (req, res) => {
         $inc: {
             savesCount: 1
         }
+    })
+
+    await Notification.create({
+        userRef: currentUserId,
+        receiver: post.author,
+        type: notificationTypes.savePost,
+        postRef: postId
     })
 
     res.status(201).json({
