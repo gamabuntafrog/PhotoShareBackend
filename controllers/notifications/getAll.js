@@ -7,7 +7,7 @@ const getAll = async (req, res) => {
 
 
     const notifications = await Notification.find({receiver: currentUserId}).sort({createdAt: -1})
-        .populate('userRef',).populate('postRef').populate('collectionRef')
+        .populate('userRef',).populate('postRef').populate('collectionRef').limit(100)
 
     const validatedNotifications = notifications.map((notification) => {
         const {type, checked, receiver, userRef, postRef = null, collectionRef = null} = notification
@@ -16,7 +16,7 @@ const getAll = async (req, res) => {
         const user = typeof userRef === 'string' ? {_id: userRef} : {_id, username, avatarURL: url}
 
         if (type === notificationTypes.subscribe || type === notificationTypes.unsubscribe) {
-            return {checked, type, user}
+            return {checked, type, user, _id}
         }
 
         if (type === notificationTypes.likePost || type === notificationTypes.unlikePost || type === notificationTypes.savePost) {
@@ -27,7 +27,7 @@ const getAll = async (req, res) => {
                     image: postRef.image.url
                 } : null
 
-            return {checked, type, user, post}
+            return {checked, type, user, post, _id}
         }
 
         if (
@@ -44,10 +44,10 @@ const getAll = async (req, res) => {
                     title: collectionRef.title
                 } : null
 
-            return {checked, type, user, collection}
+            return {checked, type, user, collection, _id}
         }
 
-        return {checked, type, user}
+        return {checked, type, user, _id}
     })
 
     res.status(200).json({

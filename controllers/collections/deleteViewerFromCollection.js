@@ -23,7 +23,7 @@ const deleteViewerFromCollection = async (req, res) => {
     const isViewerAlreadyExists = collection.viewers.some((userId) => userId.toString() === viewerId.toString())
 
     if (!isViewerAlreadyExists) {
-        throw new Conflict('userAlreadyViewer')
+        throw new Conflict(t('userAlreadyViewer'))
     }
 
     await Collection.findByIdAndUpdate(collectionId, {
