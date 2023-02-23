@@ -1,12 +1,14 @@
 const express = require('express')
 const {ctrlWrapper, auth, validateObjectId, validate} = require("../middlewares");
 const {posts: ctrl, commentsToPost: commentsCtrl} = require('../controllers')
-const {addPostValidationSchema} = require("../shemas/post");
+const {addPostValidationSchema, tagsValidationSchema} = require("../shemas/post");
 const router = express.Router()
 
 router.get('/', ctrlWrapper(auth), ctrlWrapper(ctrl.getAll))
 
 router.get('/search', ctrlWrapper(auth), ctrlWrapper(ctrl.getByTitle))
+
+router.get('/tags/:id', ctrlWrapper(auth), ctrlWrapper(ctrl.getByTags))
 
 router.get('/collections/:id', ctrlWrapper(auth), validateObjectId(), ctrlWrapper(ctrl.getPostsByCollectionId))
 

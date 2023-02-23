@@ -10,6 +10,10 @@ const tagItemValidation = Joi.string().min(MIN_TAGS_LENGTH).max(MAX_TAGS_LENGTH)
 
 const tagsValidation = Joi.array().min(1).items(tagItemValidation).required()
 
+const tagsValidationSchema = Joi.object({
+    tagsValidation
+})
+
 const postValidationObject = {
     title: Joi.string().min(MIN_TITLE_LENGTH).max(MAX_TITLE_LENGTH).required(),
     body: Joi.string().min(MIN_BODY_LENGTH).max(MAX_BODY_LENGTH).required(),
@@ -28,4 +32,5 @@ module.exports = {
     postValidationSchema,
     addPostValidationSchema,
     tagsValidation,
+    tagsValidationSchema
 }

@@ -7,6 +7,7 @@ const unlike = require('./unlike')
 const deletePost = require('./deletePost')
 const getPostsByCollectionId = require('./getPostsByCollectionId')
 const getPostsByUserId = require('./getPostsByUserId')
+const getByTags = require('./getByTags')
 
 module.exports = {
     getAll,
@@ -17,5 +18,6 @@ module.exports = {
     unlike,
     deletePost,
     getPostsByCollectionId,
-    getPostsByUserId
+    getPostsByUserId,
+    getByTags
 }
