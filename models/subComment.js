@@ -11,25 +11,25 @@ const subCommentSchema = Schema({
         type: String,
         required: true
     },
-    usersLiked: {
-        type: [{
-            type: Schema.Types.ObjectId,
-            ref: 'user'
-        }],
-    },
-    likesCount: {
-        type: Number,
-        default: 0
-    },
-    replyTo: {
+    receiver: {
         type: Schema.Types.ObjectId,
         ref: 'user',
+        required: true,
+    },
+    postRef: {
+        type: Schema.Types.ObjectId,
+        ref: 'post',
         required: true
     },
+    commentRef: {
+        type: Schema.Types.ObjectId,
+        ref: 'comment',
+        required: true
+    }
 },{
     timestamps: true
 })
 
-const SubComment = model('subComment', subCommentSchema)
+const SubComment = model('subcomment', subCommentSchema)
 
 module.exports = SubComment

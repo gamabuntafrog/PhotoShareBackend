@@ -1,31 +1,36 @@
-const {Comment, SubComment} = require("../../models");
+const {Comment, SubComment, Post} = require("../../models");
+const {NotFound} = require("http-errors");
 
 
 const addReplyComment = async (req, res) => {
 
-    const {id} = req.params
-    const {_id: userId} = req.user
+    const {postId, commentId} = req.params
+    const {text, receiver = null} = req.body
+    const {currentUserId} = req
 
+    const post = await Post.findById(postId)
 
-    const subComment = new SubComment({
-        ...req.body,
-        author: userId
+    if (!post) {
+        throw new NotFound('Posts no exists')
+    }
+
+    const subComment = await SubComment.create({
+        text,
+        author: currentUserId,
+        receiver,
+        commentRef: commentId,
+        postRef: postId
     })
 
-    const comment = await Comment.findByIdAndUpdate(id, {
+    await Comment.findByIdAndUpdate(commentId, {
         $push: {
             replies: subComment._id
         }
     })
 
-    if (comment) {
-        await subComment.save()
-    }
-
-
-    res.json({
-        status: "success",
-        data: comment
+    res.status(201).send({
+        code: 201,
+        status: 'success'
     })
 }
 

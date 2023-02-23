@@ -18,7 +18,23 @@ const findOneById = async (req, res) => {
     }).populate({
         path: 'comments',
         populate: {
-            path: 'replies'
+            path: 'author'
+        }
+    }).populate({
+        path: 'comments',
+        populate: {
+            path: 'replies',
+            populate: {
+                path: 'author'
+            }
+        }
+    }).populate({
+        path: 'comments',
+        populate: {
+            path: 'replies',
+            populate: {
+                path: 'receiver'
+            }
         }
     })
 
@@ -44,6 +60,36 @@ const findOneById = async (req, res) => {
         }
     })
 
+    const validatedComments = post.comments.map((comment) => {
+        const {_id, author, text, replies} = comment
+
+        const {_id: authorId, avatar: {url: avatarUrl}, username} = author
+        const validatedAuthor = {_id: authorId, avatar: avatarUrl, username}
+
+        const validatedReplies = replies.map((reply) => {
+            const {text, _id, author, receiver} = reply
+
+            const {_id: authorId, avatar: {url: avatarUrl}, username} = author
+            const {_id: receiverId, username: receiverUsername} = receiver
+            const validatedReceiver = {
+                _id: receiverId,
+                username: receiverUsername
+            }
+            const validatedAuthor = {_id: authorId, avatar: avatarUrl, username}
+
+            return {text, _id, author: validatedAuthor, receiver: validatedReceiver}
+        })
+
+        const validatedComment = {
+            _id,
+            author: validatedAuthor,
+            text,
+            replies: validatedReplies
+        }
+
+        return validatedComment
+    })
+
     const validatedAuthor = {_id: authorId, avatar: avatarUrl, username, subscribersCount: subscribers.length}
     const validatedPost = {
         _id,
@@ -56,7 +102,8 @@ const findOneById = async (req, res) => {
         likesCount,
         isLiked,
         isSomewhereSaved,
-        savesInfo
+        savesInfo,
+        comments: validatedComments
     }
 
 

@@ -1,6 +1,6 @@
 const express = require('express')
 const {ctrlWrapper, auth, validateObjectId, validate} = require("../middlewares");
-const {posts: ctrl, commentsToPost: commentsCtrl} = require('../controllers')
+const {posts: ctrl, comments: commentsCtrl} = require('../controllers')
 const {addPostValidationSchema, tagsValidationSchema} = require("../shemas/post");
 const router = express.Router()
 
@@ -26,5 +26,6 @@ router.patch('/:id/unlike', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(c
 
 router.post('/:id/comments', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(commentsCtrl.addComment))
 
+router.post('/:postId/comments/:commentId', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(commentsCtrl.addReplyToComment))
 
 module.exports = router

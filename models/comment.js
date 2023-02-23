@@ -11,20 +11,15 @@ const commentSchema = Schema({
         type: String,
         required: true
     },
-    usersLiked: {
-        type: [{
-            type: Schema.Types.ObjectId,
-            ref: 'user'
-        }],
-    },
-    likesCount: {
-        type: Number,
-        default: 0
+    postRef: {
+        type: Schema.Types.ObjectId,
+        ref: 'post',
+        required: true
     },
     replies: {
         type: [{
             type: Schema.Types.ObjectId,
-            ref: 'subComment'
+            ref: 'subcomment'
         }]
     }
 },{
