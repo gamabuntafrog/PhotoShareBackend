@@ -1,6 +1,7 @@
 
 
 module.exports = {
+    routeNoExists: 'Route does not exists',
     notFound: 'Not found',
     postNotFound: 'Post does not exists',
     postCreated: 'Successfully created',

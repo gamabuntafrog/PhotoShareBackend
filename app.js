@@ -49,7 +49,11 @@ app.use('/notifications', notificationsRouter)
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
-    next(createError(404, 'Route no exists'));
+    const {language = ''} = req.headers
+
+    const t = translate(language)
+
+    next(createError(404, t('routeNoExists')));
 });
 
 // error handler

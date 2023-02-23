@@ -1,4 +1,4 @@
-const {User} = require("../../models");
+const {User, Collection, Post} = require("../../models");
 const translate = require("../../utils/language/translate");
 
 
@@ -13,12 +13,18 @@ const getCollectionsByUserId = async (req, res) => {
         path: 'collections',
         populate: {
             path: 'posts',
+            perDocumentLimit: 3,
             options: {
-                sort: {createdAt: -1},
-                limit: 3
-            },
+                sort: {
+                    createdAt: -1,
+                }
+            }
         }
     })
+
+    // const {posts: testPosts} = await User.findById(id)
+
+    console.log(collections.map((col) => col.posts.length))
 
     const formattedCollections = collections.filter((collection) => {
         if (!collection.isPrivate) return true

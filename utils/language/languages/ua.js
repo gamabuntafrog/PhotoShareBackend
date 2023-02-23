@@ -1,5 +1,6 @@
 
 module.exports = {
+    routeNoExists: 'Такого маршруту не існує',
     notFound: 'Не знайдено',
     postNotFound: 'Пост не знайдений',
     postCreated: 'Пост успішно створений',
