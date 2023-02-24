@@ -5,7 +5,7 @@ const {NotFound} = require("http-errors");
 const addReplyComment = async (req, res) => {
 
     const {postId, commentId} = req.params
-    const {text, receiver = null} = req.body
+    const {text, receiverId} = req.body
     const {currentUserId} = req
 
     const post = await Post.findById(postId)
@@ -17,7 +17,7 @@ const addReplyComment = async (req, res) => {
     const subComment = await SubComment.create({
         text,
         author: currentUserId,
-        receiver,
+        receiver: receiverId,
         commentRef: commentId,
         postRef: postId
     })
