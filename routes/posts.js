@@ -28,4 +28,8 @@ router.post('/:id/comments', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(
 
 router.post('/:postId/comments/:commentId', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(commentsCtrl.addReplyToComment))
 
+router.delete('/comments/:commentId', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(commentsCtrl.deleteComment))
+
+router.delete('/replies/:replyId', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(commentsCtrl.deleteReply))
+
 module.exports = router

@@ -84,7 +84,7 @@ const findOneById = async (req, res) => {
             _id,
             author: validatedAuthor,
             text,
-            replies: validatedReplies
+            replies: validatedReplies,
         }
 
         return validatedComment
