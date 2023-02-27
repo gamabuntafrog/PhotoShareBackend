@@ -3,7 +3,7 @@ const {NotFound} = require('http-errors')
 
 const addComment = async (req, res) => {
     const {id: postId} = req.params
-    const {currentUserId} = req
+    const {currentUserId, currentUser} = req
     const {text} = req.body
 
     const post = await Post.findById(postId)
@@ -24,9 +24,19 @@ const addComment = async (req, res) => {
         }
     })
 
-    res.status(201).send({
+    const validatedComment = {
+        _id: comment._id,
+        author: {_id: currentUserId, avatar: currentUser.avatar.url, username: currentUser.username},
+        replies: [],
+        text: text
+    }
+
+    res.status(201).json({
         code: 201,
-        status: 'success'
+        status: 'success',
+        data: {
+            comment: validatedComment
+        }
     })
 }
 

@@ -14,7 +14,7 @@ const getByTags = async (req, res) => {
             $in: formattedForRegexTags
         },
         _id: {
-            $nin: id
+            $ne: id
         }
     }).populate('author')
 
