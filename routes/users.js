@@ -18,7 +18,6 @@ router.get('/current', ctrlWrapper(auth), ctrlWrapper(ctrl.getCurrent))
 
 router.patch('/current', ctrlWrapper(auth), validate(updateUserValidationSchema), ctrlWrapper(ctrl.updateCurrent))
 
-
 router.get('/:id', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(ctrl.getById))
 
 router.post('/:id/subscribes', validateObjectId(), ctrlWrapper(auth), ctrlWrapper(ctrl.addToSubscribes))
