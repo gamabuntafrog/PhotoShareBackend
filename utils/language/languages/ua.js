@@ -30,5 +30,7 @@ module.exports = {
     invalidSignature: 'Помилка авторизації',
     validationError: 'Помилка обробки даних',
     roleError: 'Помилка в обробці ролей',
-    serverError: 'Помилка серверу'
+    serverError: 'Помилка серверу',
+    youAreNotAuthor: 'Ви не автор'
+
 }

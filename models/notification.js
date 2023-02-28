@@ -25,6 +25,18 @@ const notificationSchema = Schema(
             required: false,
             default: null
         },
+        commentRef: {
+            type: Schema.Types.ObjectId,
+            ref: 'comment',
+            required: false,
+            default: null
+        },
+        subCommentRef: {
+            type: Schema.Types.ObjectId,
+            ref: 'subcomment',
+            required: false,
+            default: null
+        },
         collectionRef: {
             type: Schema.Types.ObjectId,
             ref: 'collection',

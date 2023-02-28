@@ -31,5 +31,6 @@ module.exports = {
     invalidSignature: "Invalid signature",
     validationError: 'Validation error',
     roleError: 'Invalid role',
-    serverError: 'Server error'
+    serverError: 'Server error',
+    youAreNotAuthor: 'You are not the author'
 }

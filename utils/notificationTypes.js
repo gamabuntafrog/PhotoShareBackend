@@ -8,5 +8,7 @@ module.exports = {
     deleteUserFromCollection: 'deleteUserFromCollection',
     changeUserRoleInCollection: 'changeUserRoleInCollection',
     acceptJoinToCollectionRequest: 'acceptJoinToCollectionRequest',
-    declineJoinToCollectionRequest: 'declineJoinToCollectionRequest'
+    declineJoinToCollectionRequest: 'declineJoinToCollectionRequest',
+    addCommentToPost: 'addCommentToPost',
+    addReplyToComment: 'addReplyToComment'
 }

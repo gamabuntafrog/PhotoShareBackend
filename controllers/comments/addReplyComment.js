@@ -1,5 +1,7 @@
-const {Comment, SubComment, Post, User} = require("../../models");
+const {Comment, SubComment, Post, User, Notification} = require("../../models");
 const {NotFound} = require("http-errors");
+const notificationTypes = require("../../utils/notificationTypes");
+const translate = require("../../utils/language/translate");
 
 
 const addReplyComment = async (req, res) => {
@@ -7,11 +9,14 @@ const addReplyComment = async (req, res) => {
     const {postId, commentId} = req.params
     const {text, receiverId} = req.body
     const {currentUserId, currentUser} = req
+    const {language = ''} = req.headers
+
+    const t = translate(language)
 
     const post = await Post.findById(postId)
 
     if (!post) {
-        throw new NotFound('Posts no exists')
+        throw new NotFound(t('postNotFound'))
     }
 
     const receiver = await User.findById(receiverId)
@@ -37,6 +42,16 @@ const addReplyComment = async (req, res) => {
             _id: receiverId, avatar: receiver.avatar.url, username: receiver.username
         },
         text: text,
+    }
+
+    if (subComment.author.toString() !== currentUserId) {
+        await Notification.create({
+            userRef: currentUserId,
+            receiver: receiverId,
+            type: notificationTypes.addReplyToComment,
+            postRef: post._id,
+            subCommentRef: subComment._id
+        })
     }
 
     res.status(201).json({

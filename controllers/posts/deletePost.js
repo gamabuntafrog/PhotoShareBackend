@@ -13,7 +13,7 @@ const deletePost = async (req, res) => {
     const isCurrentUserAuthorOfPost = currentUser.posts.some((_id) => _id.toString() === postId)
 
     if (!isCurrentUserAuthorOfPost) {
-        throw new Conflict('user is not author of post')
+        throw new Conflict(t('userAlreadyNotAuthor'))
     }
 
     await User.findByIdAndUpdate(currentUser._id, {
