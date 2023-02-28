@@ -44,7 +44,7 @@ const addReplyComment = async (req, res) => {
         text: text,
     }
 
-    if (subComment.author.toString() !== currentUserId) {
+    if (subComment.author.toString() !== currentUserId.toString()) {
         await Notification.create({
             userRef: currentUserId,
             receiver: receiverId,
