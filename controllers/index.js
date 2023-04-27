@@ -6,10 +6,10 @@ const notifications = require('./notifications')
 const collections = require('./collections')
 
 module.exports = {
-    posts,
-    users,
-    auth,
-    comments,
-    notifications,
-    collections
+  posts,
+  users,
+  auth,
+  comments,
+  notifications,
+  collections
 }

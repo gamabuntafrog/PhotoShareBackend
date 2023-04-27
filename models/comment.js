@@ -1,32 +1,35 @@
-const {Schema, model} = require('mongoose')
+const { Schema, model } = require('mongoose')
 
-
-const commentSchema = Schema({
+const commentSchema = Schema(
+  {
     author: {
-        type: Schema.Types.ObjectId,
-        ref: 'user',
-        required: true
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+      required: true
     },
     text: {
-        type: String,
-        required: true
+      type: String,
+      required: true
     },
     postRef: {
-        type: Schema.Types.ObjectId,
-        ref: 'post',
-        required: true
+      type: Schema.Types.ObjectId,
+      ref: 'post',
+      required: true
     },
     replies: {
-        type: [{
-            type: Schema.Types.ObjectId,
-            ref: 'subcomment'
-        }]
+      type: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: 'subcomment'
+        }
+      ]
     }
-},{
+  },
+  {
     timestamps: true
-})
+  }
+)
 
 const Comment = model('comment', commentSchema)
 
 module.exports = Comment
-

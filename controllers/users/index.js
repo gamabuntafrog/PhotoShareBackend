@@ -11,15 +11,15 @@ const getUsersForSearchBar = require('./getUsersForSearchBar')
 const getUsersByUsername = require('./getUsersByUsername')
 
 module.exports = {
-    getAll,
-    addToSubscribes,
-    deleteFromSubscribes,
-    getSubscribes,
-    getCurrent,
-    getById,
-    updateCurrent,
-    getUsersForAddInCollection,
-    getAllowedToViewCollections,
-    getUsersForSearchBar,
-    getUsersByUsername
+  getAll,
+  addToSubscribes,
+  deleteFromSubscribes,
+  getSubscribes,
+  getCurrent,
+  getById,
+  updateCurrent,
+  getUsersForAddInCollection,
+  getAllowedToViewCollections,
+  getUsersForSearchBar,
+  getUsersByUsername
 }

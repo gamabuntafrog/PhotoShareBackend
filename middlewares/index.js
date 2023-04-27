@@ -5,9 +5,9 @@ const validateObjectId = require('./validateObjectId')
 const validateRole = require('./validateRole')
 
 module.exports = {
-    ctrlWrapper,
-    auth,
-    validate,
-    validateObjectId,
-    validateRole
+  ctrlWrapper,
+  auth,
+  validate,
+  validateObjectId,
+  validateRole
 }

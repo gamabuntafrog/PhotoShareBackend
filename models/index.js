@@ -6,10 +6,10 @@ const Notification = require('./notification')
 const Collection = require('./collection')
 
 module.exports = {
-    Post,
-    User,
-    Comment,
-    SubComment,
-    Notification,
-    Collection
+  Post,
+  User,
+  Comment,
+  SubComment,
+  Notification,
+  Collection
 }

@@ -10,14 +10,14 @@ const getPostsByUserId = require('./getPostsByUserId')
 const getByTags = require('./getByTags')
 
 module.exports = {
-    getAll,
-    createPost,
-    findOneById,
-    getByTitle,
-    like,
-    unlike,
-    deletePost,
-    getPostsByCollectionId,
-    getPostsByUserId,
-    getByTags
+  getAll,
+  createPost,
+  findOneById,
+  getByTitle,
+  like,
+  unlike,
+  deletePost,
+  getPostsByCollectionId,
+  getPostsByUserId,
+  getByTags
 }
