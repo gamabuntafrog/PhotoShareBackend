@@ -3,7 +3,7 @@ const { Post, User } = require('../../models')
 const paginationQuery = require('../../helpers/paginationQuery')
 
 const getAll = async (req, res) => {
-  const { currentUserId, currentUser: currentUserFromReq } = req
+  const { currentUserId, currentUser } = req
   const { arrayOfId, limit } = paginationQuery(req.query)
 
   const pipeline = [
@@ -37,7 +37,7 @@ const getAll = async (req, res) => {
     },
     {
       $addFields: {
-        currentUserCollections: currentUserFromReq.collections
+        currentUserCollections: currentUser.collections
       }
     },
     {
