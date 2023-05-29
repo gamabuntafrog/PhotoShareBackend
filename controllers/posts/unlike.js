@@ -23,7 +23,7 @@ const unlike = async (req, res) => {
     throw new Conflict(t('postNotLiked'))
   }
 
-  await Promise.all(
+  await Promise.all([
     Post.findByIdAndUpdate(postId, {
       $inc: {
         likesCount: -1
@@ -37,7 +37,7 @@ const unlike = async (req, res) => {
         likedPosts: postId
       }
     })
-  )
+  ])
 
   if (currentUserId.toString() !== post.author.toString()) {
     await Notification.create({

@@ -24,7 +24,7 @@ const like = async (req, res) => {
     throw new Conflict(t('postLiked'))
   }
 
-  await Promise.all(
+  await Promise.all([
     Post.findByIdAndUpdate(postId, {
       $inc: {
         likesCount: 1
@@ -38,7 +38,7 @@ const like = async (req, res) => {
         likedPosts: postId
       }
     })
-  )
+  ])
 
   if (currentUserId.toString() !== post.author.toString()) {
     await Notification.create({
