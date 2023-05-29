@@ -16,13 +16,14 @@ const deletePost = async (req, res) => {
     throw new Conflict(t('userAlreadyNotAuthor'))
   }
 
-  await User.findByIdAndUpdate(currentUser._id, {
-    $pull: {
-      posts: postId
-    }
-  })
-
-  await Post.findByIdAndDelete(postId)
+  await Promise.all([
+    User.findByIdAndUpdate(currentUser._id, {
+      $pull: {
+        posts: postId
+      }
+    }),
+    Post.findByIdAndDelete(postId)
+  ])
 
   res.status(202).json({
     code: 202,

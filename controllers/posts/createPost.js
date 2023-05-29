@@ -1,6 +1,7 @@
 const { Post, Collection, User } = require('../../models')
 const cloudinary = require('../../utils/cloudinary')
 const translate = require('../../utils/language/translate')
+const createNewObjectId = require('../../helpers/createNewObjectId')
 
 const createPost = async (req, res) => {
   const { currentUserId } = req
@@ -19,32 +20,32 @@ const createPost = async (req, res) => {
     id: result.public_id
   }
 
-  const post = await Post.create({
-    ...req.body,
-    author: currentUserId,
-    image
-  })
+  const postId = createNewObjectId()
 
-  await Collection.findByIdAndUpdate(collectionId, {
-    $push: {
-      posts: post._id
-    }
-  })
-
-  await User.findByIdAndUpdate(currentUserId, {
-    $push: {
-      posts: post._id,
-      savedPosts: { post: post._id, collection: collectionId }
-    }
-  })
+  await Promise.all([
+    Post.create({
+      _id: postId,
+      ...req.body,
+      author: currentUserId,
+      image
+    }),
+    Collection.findByIdAndUpdate(collectionId, {
+      $push: {
+        posts: postId
+      }
+    }),
+    User.findByIdAndUpdate(currentUserId, {
+      $push: {
+        posts: postId,
+        savedPosts: { post: postId, collection: collectionId }
+      }
+    })
+  ])
 
   res.status(201).json({
     code: 201,
     status: 'success',
     message: t('postCreated'),
-    data: {
-      post
-    }
   })
 }
 
