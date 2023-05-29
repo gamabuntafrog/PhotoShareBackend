@@ -1,6 +1,6 @@
 const paginationQuery = require('./paginationQuery')
 
-class PostsAggregations {
+class PostsAggregation {
   constructor(currentUserId) {
     this.currentUserId = currentUserId
   }
@@ -111,4 +111,4 @@ class PostsAggregations {
   }
 }
 
-module.exports = PostsAggregations
+module.exports = PostsAggregation

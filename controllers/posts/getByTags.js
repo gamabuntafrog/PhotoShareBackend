@@ -1,5 +1,5 @@
 const formatTagsFromQuery = require('../../helpers/formatTagsFromQuery')
-const PostsAggregations = require('../../helpers/postsAggregations')
+const PostsAggregation = require('../../helpers/postsAggregation')
 const { Post, User } = require('../../models')
 
 const getByTags = async (req, res) => {
@@ -7,7 +7,7 @@ const getByTags = async (req, res) => {
   const { currentUserId, currentUser: currentUserTest } = req
   const tags = formatTagsFromQuery(req.query)
 
-  const postsAggregations = new PostsAggregations(currentUserId)
+  const postsAggregation = new PostsAggregation(currentUserId)
 
   const pipeline = [
     {
@@ -20,7 +20,7 @@ const getByTags = async (req, res) => {
         }
       }
     },
-    ...postsAggregations.standardPipeline(currentUserTest.collections, req.query)
+    ...postsAggregation.standardPipeline(currentUserTest.collections, req.query)
   ]
 
   const posts = await Post.aggregate(pipeline).exec();
