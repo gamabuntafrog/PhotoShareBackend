@@ -1,3 +1,5 @@
+const paginationQuery = require('./paginationQuery')
+
 class PostsAggregations {
   constructor(currentUserId) {
     this.currentUserId = currentUserId
@@ -89,6 +91,23 @@ class PostsAggregations {
       isSomewhereSaved: this.isSomewhereSaved,
       savesInfo: this.savesInfo
     }
+  }
+
+  standardPipeline(collections, query) {
+    
+    return [
+      {
+        $sort: this.sort
+      },
+      {
+        $limit: paginationQuery(query).limit
+      },
+      ...this.lookupAuthor,
+      ...this.addCurrentUserCollections(collections),
+      {
+        $project: this.standardProject
+      }
+    ]
   }
 }
 

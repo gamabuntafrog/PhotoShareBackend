@@ -114,31 +114,33 @@ class PostAggregation {
       }
     }
   }
-  
+
   isLiked = (currentUserId) => ({ $in: [currentUserId, '$usersLiked'] })
 
   get standardProject() {
     return {
+      author: 1,
+      comments: {
         author: 1,
-        comments: {
-            author: 1,
-            createdAt: 1,
-            updatedAt: 1,
-            postRef: 1,
-            replies: 1,
-            text: 1,
-        },
-        image: '$image.url',
-        likesCount: 1,
-        savesCount: 1,
-        tags: 1,
-        title: 1,
-        body: 1,
-        savesInfo: this.savesInfo,
-        isSomewhereSaved: this.isSomewhereSaved,
-        isLiked: this.isLiked(this.currentUserId),
-      }
+        createdAt: 1,
+        updatedAt: 1,
+        postRef: 1,
+        replies: 1,
+        text: 1
+      },
+      image: '$image.url',
+      likesCount: 1,
+      savesCount: 1,
+      tags: 1,
+      title: 1,
+      body: 1,
+      savesInfo: this.savesInfo,
+      isSomewhereSaved: this.isSomewhereSaved,
+      isLiked: this.isLiked(this.currentUserId)
+    }
   }
+
+  
 }
 
 module.exports = PostAggregation
