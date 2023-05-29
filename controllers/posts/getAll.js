@@ -1,13 +1,13 @@
 const { Types } = require('mongoose')
 const { Post, User } = require('../../models')
 const paginationQuery = require('../../helpers/paginationQuery')
-const PostAggregations = require('../../helpers/postsAggregations')
+const PostsAggregations = require('../../helpers/postsAggregations')
 
 const getAll = async (req, res) => {
   const { currentUserId, currentUser } = req
   const { arrayOfId, limit } = paginationQuery(req.query)
 
-  const { sort, lookupAuthor, addCurrentUserCollections, standardProject } = new PostAggregations(
+  const { sort, lookupAuthor, addCurrentUserCollections, standardProject } = new PostsAggregations(
     currentUserId
   )
 

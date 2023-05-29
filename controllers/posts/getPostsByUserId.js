@@ -1,3 +1,4 @@
+const PostsAggregations = require('../../helpers/postsAggregations')
 const { User } = require('../../models')
 const translate = require('../../utils/language/translate')
 
@@ -7,6 +8,8 @@ const getPostsByUserId = async (req, res) => {
   const { arrayOfId = '[]' } = req.query
 
   const parsedArrayOfId = JSON.parse(arrayOfId)
+
+  // const postsAggregations = new PostsAggregations
 
   const { posts } = await User.findById(id).populate({
     path: 'posts',

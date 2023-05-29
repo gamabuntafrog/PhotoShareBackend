@@ -1,4 +1,4 @@
-class PostAggregations {
+class PostsAggregations {
   constructor(currentUserId) {
     this.currentUserId = currentUserId
   }
@@ -92,4 +92,4 @@ class PostAggregations {
   }
 }
 
-module.exports = PostAggregations
+module.exports = PostsAggregations
