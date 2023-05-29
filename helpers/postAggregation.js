@@ -126,7 +126,8 @@ class PostAggregation {
         updatedAt: 1,
         postRef: 1,
         replies: 1,
-        text: 1
+        text: 1,
+        _id: 1
       },
       image: '$image.url',
       likesCount: 1,
