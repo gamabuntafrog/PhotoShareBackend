@@ -28,7 +28,7 @@ const findOneById = async (req, res) => {
       $project: postAggregation.standardProject
     }
   ]
-
+     
   const [post] = await Post.aggregate(pipeline).exec()
 
   if (!post) {

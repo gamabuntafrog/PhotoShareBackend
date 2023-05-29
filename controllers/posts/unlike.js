@@ -23,21 +23,21 @@ const unlike = async (req, res) => {
     throw new Conflict(t('postNotLiked'))
   }
 
-  const updatedPost = await Post.findByIdAndUpdate(postId, {
-    $inc: {
-      likesCount: -1
-    },
-    $pull: {
-      usersLiked: currentUserId
-    },
-    new: true
-  })
-
-  const removePostFromUserLiked = await User.findByIdAndUpdate(currentUserId, {
-    $pull: {
-      likedPosts: postId
-    }
-  })
+  await Promise.all(
+    Post.findByIdAndUpdate(postId, {
+      $inc: {
+        likesCount: -1
+      },
+      $pull: {
+        usersLiked: currentUserId
+      }
+    }),
+    User.findByIdAndUpdate(currentUserId, {
+      $pull: {
+        likedPosts: postId
+      }
+    })
+  )
 
   if (currentUserId.toString() !== post.author.toString()) {
     await Notification.create({

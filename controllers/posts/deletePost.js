@@ -5,7 +5,7 @@ const translate = require('../../utils/language/translate')
 
 const deletePost = async (req, res) => {
   const { id: postId } = req.params
-  const { user: currentUser } = req
+  const { currentUser } = req
   const { language = '' } = req.headers
 
   const t = translate(language)

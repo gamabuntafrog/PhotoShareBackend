@@ -24,21 +24,21 @@ const like = async (req, res) => {
     throw new Conflict(t('postLiked'))
   }
 
-  const updatedPost = await Post.findByIdAndUpdate(postId, {
-    $inc: {
-      likesCount: 1
-    },
-    $push: {
-      usersLiked: currentUserId
-    },
-    new: true
-  })
-
-  const addPostInUserLiked = await User.findByIdAndUpdate(currentUserId, {
-    $push: {
-      likedPosts: postId
-    }
-  })
+  await Promise.all(
+    Post.findByIdAndUpdate(postId, {
+      $inc: {
+        likesCount: 1
+      },
+      $push: {
+        usersLiked: currentUserId
+      }
+    }),
+    User.findByIdAndUpdate(currentUserId, {
+      $push: {
+        likedPosts: postId
+      }
+    })
+  )
 
   if (currentUserId.toString() !== post.author.toString()) {
     await Notification.create({
