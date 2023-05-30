@@ -36,7 +36,7 @@ const addComment = async (req, res) => {
     text: text
   }
 
-  if (post.author.toString() !== currentUserId) {
+  if (post.author.toString() !== currentUserId.toString()) {
     await Notification.create({
       userRef: currentUserId,
       receiver: post.author,
