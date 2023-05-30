@@ -1,3 +1,4 @@
+const { Types } = require('mongoose')
 const formatTagsFromQuery = require('../../helpers/formatTagsFromQuery')
 const PostsAggregation = require('../../helpers/postsAggregation')
 const { Post, User } = require('../../models')
@@ -16,20 +17,20 @@ const getByTags = async (req, res) => {
           $in: tags
         },
         _id: {
-          $ne: id
+          $ne: new Types.ObjectId(id)
         }
       }
     },
     ...postsAggregation.standardPipeline(currentUserTest.collections, req.query)
   ]
 
-  const posts = await Post.aggregate(pipeline).exec();
+  const posts = await Post.aggregate(pipeline).exec()
 
   res.status(200).send({
     code: 200,
     status: 'success',
     data: {
-      posts,
+      posts
     }
   })
 }
