@@ -52,13 +52,28 @@ class PostAggregation {
     }
   ]
 
+  lookupReceiver = [
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'receiver',
+        foreignField: '_id',
+        as: 'receiver',
+        pipeline: [{ $project: { username: 1 } }]
+      }
+    },
+    {
+      $unwind: '$receiver'
+    }
+  ]
+
   lookupReply = {
     $lookup: {
       from: 'subcomments',
       localField: 'replies',
       foreignField: '_id',
       as: 'replies',
-      pipeline: [...this.lookupAuthorOfComment]
+      pipeline: [...this.lookupAuthorOfComment, ...this.lookupReceiver]
     }
   }
 
@@ -140,8 +155,6 @@ class PostAggregation {
       isLiked: this.isLiked(this.currentUserId)
     }
   }
-
-  
 }
 
 module.exports = PostAggregation
