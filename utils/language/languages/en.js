@@ -30,5 +30,6 @@ module.exports = {
   validationError: 'Validation error',
   roleError: 'Invalid role',
   serverError: 'Server error',
-  youAreNotAuthor: 'You are not the author'
+  youAreNotAuthor: 'You are not the author',
+  unsaved: 'Successfully unsaved'
 }

@@ -30,5 +30,6 @@ module.exports = {
   validationError: 'Помилка обробки даних',
   roleError: 'Помилка в обробці ролей',
   serverError: 'Помилка серверу',
-  youAreNotAuthor: 'Ви не автор'
+  youAreNotAuthor: 'Ви не автор',
+  unsaved: 'Успішно видалено'
 }

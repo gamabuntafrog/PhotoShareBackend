@@ -38,7 +38,7 @@ const deletePostFromCollection = async (req, res) => {
   res.status(201).json({
     code: 201,
     status: 'success',
-    message: 'Successfully unsaved'
+    message: t('unsaved')
   })
 }
 
